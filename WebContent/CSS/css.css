@@ -1,0 +1,38 @@
+.label {
+    display: block;
+    width: 10%;
+    float: left;
+}
+
+#description {
+    height: 20%;
+}
+
+#ajout, #retour, #enregistrer, #masquer {
+    float: right;
+    margin-bottom: 10px;
+}
+
+#nom, #description, #executable, #file, #paramNec{
+    width: 50%;
+    float:right;
+}
+
+#divParam {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    width: 40%;
+}
+
+#paramNec {
+    width: 50%;
+}
+
+#boutons{
+    float:right;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    width: 10%;
+}

@@ -1,0 +1,48 @@
+#menu, #menu ul {
+    padding: 5px;
+    margin: 0;
+    list-style: none;
+}
+
+#menu {
+    text-align: center;
+}
+
+#menu li {
+    display: inline-block;
+    width: 24%;
+    border: 1px solid #000000;
+    border-radius: 8px 8px 8px 8px;
+    padding: 1px;
+}
+
+#menu ul li {
+    display: block;
+    text-align: center;
+    width: 175%;
+    padding: 0 25% 1%;
+    margin: 1% 1% 1% 25%;
+}
+
+#menu a {
+    text-decoration: none;
+    display: block;
+    color: #000;
+}
+
+#menu ul {
+    position: absolute;
+    /* on cache les sous menus complètement sur la gauche */
+    left: -999em;
+    text-align: left;
+    z-index: 1000;
+}
+
+#menu li:hover ul {
+    /* Au survol des li du menu on replace les sous menus */
+    left: auto;
+}
+
+#divMenu {
+    height: 50px;
+}

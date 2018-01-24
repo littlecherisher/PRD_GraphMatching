@@ -1,0 +1,53 @@
+.onglet
+{
+    display:inline-block;
+    margin-left:3px;
+    margin-right:3px;
+    padding:3px;
+    border:1px solid black;
+    cursor:pointer;
+}
+.onglet a
+{
+    color:#000000;
+    text-decoration:none;
+}
+.onglet_n
+{
+    background:#bbbbbb;
+    border-bottom:1px solid black;
+}
+.onglet_y
+{
+    background:#dddddd;
+    border-bottom:0 solid black;
+    padding-bottom:4px;
+}
+.contenu
+{
+    background-color:#dddddd;
+    border:1px solid black;
+    margin-top:-1px;
+    padding:5px;
+}
+ul
+{
+    margin-top:0;
+    margin-bottom:0;
+    margin-left:-10px
+}
+
+.subgroupe
+{
+    display:inline-block;
+    vertical-align: top;
+    position: relative;
+}
+.groupe
+{
+    display:inline-block;
+    vertical-align: top;
+    position: relative;
+    width: 45%;
+    margin-bottom: 20px;
+}

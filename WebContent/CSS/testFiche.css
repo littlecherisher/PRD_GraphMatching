@@ -1,0 +1,53 @@
+.tableau {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    width: 30%;
+}
+
+#test {
+    margin-top: 10%;
+    height: 30%;
+}
+
+.label {
+    display: block;
+    width: 30%;
+    float: left;
+}
+
+.labelParam {
+    display: block;
+    width: 70%;
+    float: left;
+}
+
+#nom, #description, #mode {
+    width: 70%;
+}
+
+#description {
+    height: 45%;
+}
+
+#temps, #tempsHeur, #memoire, #tolerence, #thread {
+    width: 20%;
+}
+
+#ajout, #retour, #enregistrer, #masquer {
+    float: right;
+    margin-bottom: 10px;
+}
+#divParam {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    width: 10%;
+}
+#boutons{
+    float:right;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    width: 10%;
+}

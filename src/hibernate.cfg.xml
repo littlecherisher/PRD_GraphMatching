@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">org.h2.Driver</property>
+        <property name="connection.url">jdbc:h2:tcp://localhost/./ProjetPRD/GraphMatching;AUTO_SERVER=TRUE</property>
+        <property name="connection.username"></property>
+        <property name="connection.password"></property>
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+        <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.connection.CharSet">utf8</property>
+        <property name="hibernate.connection.characterEncoding">utf8</property>
+        <property name="hibernate.connection.useUnicode">true</property>
+        <!--<property name="connection.pool_size">1000000000</property>-->
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+        <mapping class="Model.Methode"/>
+        <mapping class="Model.Dataset"/>
+        <mapping class="Model.Test"/>
+        <mapping class="Model.Subset"/>
+        <mapping class="Model.Execution"/>
+    </session-factory>
+</hibernate-configuration>
