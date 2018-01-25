@@ -13,19 +13,7 @@
     margin-bottom: 10px;
 }
 
-#nom, #description, #executable, #file, #paramNec{
-    width: 50%;
-    float:right;
-}
-
-#divParam {
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 20px;
-    width: 40%;
-}
-
-#paramNec {
+#nom, #description, #executable, #file {
     width: 50%;
 }
 

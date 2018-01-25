@@ -18,8 +18,8 @@
 </head>
 <body>
 <jsp:include page="index.jsp"/>
+<br/><br/>
 <h1>Liste des méthodes</h1>
-
 <div class="uk-overflow-container" width="80%">
     <fieldset>
         <legend>Rechercher :</legend>

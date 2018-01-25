@@ -18,6 +18,7 @@
 </head>
 <body>
 <jsp:include page="index.jsp"/>
+<br/><br/>
 <h1>Résultats de l'exécution <c:out value="${execution.nom}"/> :</h1>
     <div class="onglets">
         <div class="<%=getOngletActif("general",(String)request.getAttribute("infos"))%> onglet">

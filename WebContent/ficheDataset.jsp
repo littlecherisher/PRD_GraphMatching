@@ -15,6 +15,7 @@
 </head>
 <body>
 <jsp:include page="index.jsp"/>
+<br/><br/>
 <c:choose>
     <c:when test="${not empty dataset}">
         <h1>Modification de la collection de graphes n° <c:out value="${dataset.id}"/> :</h1>

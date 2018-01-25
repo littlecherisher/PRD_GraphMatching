@@ -20,6 +20,7 @@
 </head>
 <body>
 <jsp:include page="index.jsp"/>
+<br/><br/>
 <c:choose>
     <c:when test="${not empty methode}">
         <h1>Modification de la méthode n° <c:out value="${methode.id}"/> :</h1>
@@ -54,7 +55,6 @@
             <input type="button" value="+ Ajouter" onclick="addParamHeuristique()">
             <c:forEach items="${params.keySet()}" var="key">
                     <div>
-                        <br/><br/>
                         <label for="nomsParam[]">Nom : </label>
                         <input type="text" name="nomsParam[]" id="nomsParam[]" value="<c:out value="${key}"/>"/>
                         <label for="typesParam[]">Type : </label>

@@ -15,6 +15,7 @@
 </head>
 <body>
 <jsp:include page="index.jsp"/>
+<br/><br/>
 <c:choose>
     <c:when test="${not empty methode}">
         <h1>Modification de la méthode n° <c:out value="${methode.id}"/> :</h1>
