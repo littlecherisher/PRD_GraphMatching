@@ -17,6 +17,10 @@
     width: 50%;
 }
 
+#divparam {
+	width: 60.2%;
+}
+
 #boutons{
     float:right;
     display: inline-block;

@@ -69,7 +69,7 @@
         <c:if test="${not empty methode}">
             <form action="/GraphMatching/MasquerMethode" method="post">
                 <input type="hidden" name="id" value="<c:out value="${methode.id}"/>"/>
-                <input type="submit" id="masquer" value="Masquer ce méthode">
+                <input type="submit" id="masquer" value="Masquer cette méthode">
             </form>
             <br/>
         </c:if>
@@ -78,7 +78,7 @@
         </form>
         <br/>
         <form action="/GraphMatching/FicheMethodeHeuristique" type="GET">
-            <input id="ajout" type="submit" value="+ ajouter une méthode heuristique">
+            <input id="ajout" type="submit" value="+ Ajouter une méthode heuristique">
         </form>
     </div>
 </form>

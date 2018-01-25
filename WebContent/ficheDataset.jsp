@@ -64,7 +64,7 @@
         </form>
         <br/>
         <form action="/GraphMatching/FicheDataset" type="GET">
-            <input id="ajout" type="submit" value="+ ajouter une collection">
+            <input id="ajout" type="submit" value="+ Ajouter une collection">
         </form>
     </div>
 </form>

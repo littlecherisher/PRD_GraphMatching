@@ -192,7 +192,7 @@
             </form>
         </c:if>
         <form action="/GraphMatching/FicheTest" type="GET">
-            <input type="submit" id="ajout" value="+ ajouter un test">
+            <input type="submit" id="ajout" value="+ Ajouter un test">
         </form>
         <form action="/GraphMatching/ListeTest" method="get">
             <input type="submit" id="retour" value="Liste des tests">

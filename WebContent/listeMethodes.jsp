@@ -48,11 +48,11 @@
     </table>
 
     <form action="/GraphMatching/FicheMethodeExacte" type="GET">
-        <input id="ajout" type="submit" value="+ ajouter une méthode exacte">
+        <input id="ajout" type="submit" value="+ Ajouter une méthode exacte">
     </form>
     
     <form action="/GraphMatching/FicheMethodeHeuristique" type="GET">
-        <input id="ajout" type="submit" value="+ ajouter une méthode heuristique">
+        <input id="ajout" type="submit" value="+ Ajouter une méthode heuristique">
     </form>
 </div>
 </body>

@@ -72,7 +72,7 @@
     </table>
     <div id="exec"></div>
     <form action="/GraphMatching/FicheTest" type="GET">
-        <input id="ajout" type="submit" value="+ ajouter un test">
+        <input id="ajout" type="submit" value="+ Ajouter un test">
     </form>
 </div>
 </body>

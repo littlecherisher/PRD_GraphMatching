@@ -68,7 +68,7 @@
 </div>
 <div id="infos"></div>
 <form action="/GraphMatching/ListeTest" type="GET">
-    <input id="ajout" type="submit" value="+ ajouter une exécution">
+    <input id="ajout" type="submit" value="+ Ajouter une exécution">
 </form>
 </body>
 </html>
