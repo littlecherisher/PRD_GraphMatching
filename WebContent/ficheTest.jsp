@@ -32,31 +32,29 @@
 </c:choose>
 <form action="/GraphMatching/FicheTest" method="post" id="form" onsubmit="return validForm()">
     <input type="hidden" name="test" value="<c:out value="${test.id}"/>"/>
-    <div class="tableau">
-        <table id="methodes" name="methodes" class="display" cellspacing="0">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Méthodes</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${methodes}" var="methode">
-            <tr
-                    <c:if test="${test.methodes.contains(methode)}">
-                        <c:out value="class=memo "/>
-                    </c:if>
-                    id=<c:out value="${methode.id}"/>
-                    onclick='getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>", "<c:out value="${methode.paramsHeuristique}"/>")'/>                  
-                    <%-- ${methode.id},${methode.nom},${methode.paramsHeuristique} --%>
-                <td></td>
-                <td><c:out value="${methode.nom}"/></td>             
-            </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
-    <div class="tableau">
+		<div class="tableau">
+			<table id="methodes" name="methodes" class="display" cellspacing="0">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Méthodes</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${methodes}" var="methode">
+						<tr
+							<c:if test="${test.methodes.contains(methode)}">
+                				<c:out value="class=memo "/>
+                			</c:if>
+							id=<c:out value="${methode.id}"/> />
+						<td id=<c:out value="${methode.id}"/>
+							onclick='getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>","<c:out value="${methode.paramsHeuristique}"/>")' />
+						<td><c:out value="${methode.nom}" /></td>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+		<div class="tableau">
         <table id="datasets" name="Datasets" class="display" cellspacing="0">
             <thead>
             <tr>
@@ -165,7 +163,9 @@
         </fieldset>
     </div>
     <br/><br/>
-    <div id="divParamNew">
+    <div id="divParamNewLarge">
+    	<div id="divParamNew">
+    	</div>
     </div>
     <div id="boutons">
         <input type="submit" value="Enregistrer" name="enregistrer" id="enregistrer" onclick="getSelected()"/>
