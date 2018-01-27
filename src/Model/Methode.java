@@ -149,13 +149,21 @@ public class Methode{
     }
     
     /**
-     * Ajoute un paramètre à la liste
-     * @param nom nom du paramètre
-     * @param type type du paramètre
+     * Getter : retourne la liste des paramètres heuristiques associés à la méthode
+     * @return liste des paramètres heuristiques associés à la méthode
+     */
+    public List<String> getParamsHeuristique () {
+        return paramsHeuristique;
+    }
+    
+    /**
+     * Ajoute un paramètre heuristique à la liste sous forme nom(type)
+     * @param nom nom du paramètre heuristique
+     * @param type type du paramètre heuristique
      */
     public void addParamHeuristique(String nom, String type) {
         if (!nom.isEmpty() && !type.isEmpty()) 
-        	paramsHeuristique.add(nom + " ( " + type + " ) ");
+        	paramsHeuristique.add(nom + "(" + type + ")");
     }
 
     /**

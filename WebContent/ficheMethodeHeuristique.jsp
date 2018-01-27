@@ -53,7 +53,7 @@
         <fieldset id="paramNec">
             <legend>Paramètres nécessaires :</legend>
             <input type="button" value="+ Ajouter" onclick="addParamHeuristique()">
-            <c:forEach items="${params.keySet()}" var="key">
+            <%-- <c:forEach items="${params.keySet()}" var="key">
                     <div>
                         <label for="nomsParam[]">Nom : </label>
                         <input type="text" name="nomsParam[]" id="nomsParam[]" value="<c:out value="${key}"/>"/>
@@ -61,7 +61,7 @@
                         <input type="text" name="typesParam[]" id="typesParam[]" value="<c:out value="${params[key]}"/>"/>
 						</select> <input type='button' value='Supprimer' class="deleteParam"/>
                     </div>
-            </c:forEach>
+            </c:forEach> --%>
         </fieldset>
     </div>
     <div id="boutons">

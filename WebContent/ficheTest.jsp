@@ -47,7 +47,8 @@
                         <c:out value="class=memo "/>
                     </c:if>
                     id=<c:out value="${methode.id}"/>
-                    onclick='getExec(<c:out value="${test.id}"/>,"<c:out value="${test.nom}"/>")'/>
+                    onclick='getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>", "<c:out value="${methode.paramsHeuristique}"/>")'/>                  
+                    <%-- ${methode.id},${methode.nom},${methode.paramsHeuristique} --%>
                 <td></td>
                 <td><c:out value="${methode.nom}"/></td>             
             </tr>
@@ -163,25 +164,8 @@
             </c:forEach>
         </fieldset>
     </div>
-    <div class="tableau">
-        <fieldset>
-            <legend>Paramètres pour :</legend>
-            <label for="memoire" class="labelParam">Mémoire limite (en Mo) :</label>
-            <input type="text" id="memoire" name="memoire" value="<c:out value="${params['memoire']}"/>">
-            <br/><br/>
-            <label for="temps" class="labelParam">Temps limite (en sec):</label>
-            <input type="text" id="temps" name="temps" value="<c:out value="${params['temps']}"/>">
-            <br/><br/>
-            <label for="tempsHeur" class="labelParam">Temps limite heuristique (en sec):</label>
-            <input type="text" id="tempsHeur" name="tempsHeur" value="<c:out value="${params['tempsHeur']}"/>">
-            <br/><br/>
-            <label for="tolerence" class="labelParam">Tolérence d'écart :</label>
-            <input type="text" id="tolerence" name="tolerence" value="<c:out value="${params['tolerence']}"/>">
-            <br/><br/>
-            <label for="thread" class="labelParam">Nombre de threads :</label>
-            <input type="text" id="thread" name="thread" value="<c:out value="${params['thread']}"/>">
-            <br/><br/>
-        </fieldset>
+    <br/><br/>
+    <div id="divParamNew">
     </div>
     <div id="boutons">
         <input type="submit" value="Enregistrer" name="enregistrer" id="enregistrer" onclick="getSelected()"/>
@@ -198,6 +182,7 @@
             <input type="submit" id="retour" value="Liste des tests">
         </form>
     </div>
+    
 </form>
 </body>
 </html>

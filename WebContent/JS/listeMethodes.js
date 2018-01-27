@@ -13,5 +13,10 @@ $(document).ready(function () {
     });
 });
 function modif(methode) {
-    document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + methode;
+	/*if (methode.paramsHeuristique != null) {
+		document.location.href = '/GraphMatching/FicheMethodeHeuristique?methode=' + methode;
+	} else {
+		document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + methode;
+	}*/
+	document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + methode;
 };

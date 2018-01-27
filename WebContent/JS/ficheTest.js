@@ -42,12 +42,54 @@ $(document).ready(function () {
 
 function addParam() {
     const param = "<div></br></br>" +
-        "<label for='nomsParam[]'>Nom : </label>" +
+        "<label for='nomsParam[]'> Nom : </label>" +
         "<input type='text' name='nomsParam[]' id='nomsParam[]'/> " +
         "<label for='valeursParam[]'>Valeur : </label>" +
         "<input type='text' name='valeursParam[]' id='valeursParam[]'/> " +
         "<input class='deleteParam' type='button' value='Supprimer'/></div>";
     $('#paramSup').append(param);
+}
+
+function addParamHeuristique(nomtype) {
+    const paramHeuristique = "<div></br></br>" +
+    "<label for='nom' class='label'>"+ nomtype +" :</label>" +
+    "<input type='text' name='valeur' id='valeur' required='required'/> "
+    $('#paramNecH').append(paramHeuristique);
+}
+ 
+function getParams(id, nom, paramsHeuristique) {
+	//alert("start");
+	var newParamsHeuristique = paramsHeuristique.substring(1,paramsHeuristique.length-1);
+	paramsHeuristiqueCut = newParamsHeuristique.split(",");
+	/*for(var i = 0 ; i < paramsHeuristiqueCut.length ; i++){		
+		//alert(paramsHeuristiqueCut[i]);
+	}*/
+	if(paramsHeuristique.length>2){
+		//alert( paramsHeuristiqueCut.length);
+		document.getElementById('divParamNew').style.display="";
+		const param = 		
+			"<div id='divParamH'>"+
+				"<fieldset id='paramNecH'>"+
+					"<legend>Veuillez entrer les valeurs de paramètre nécessaires pour " + nom + " :</legend>" +
+					//"<input type='button' value='任意添加' onclick='addParamHeuristique()'>"+//测试按钮
+						"<c:forEach items='${params.keySet()}' var='key'>"+             
+							"<div>"+
+								"<br/><br/>"+  
+								"<label for='nom' class='label'>" +  paramsHeuristiqueCut[0] + " : " + "</label>" +
+								"<input type='text' name='valeur' id='valeur' required='required' value=''${key}'/>"+      
+							"</div>"+
+						"</c:forEach>"+
+				"</fieldset>"+
+			"</div>";
+		
+		document.getElementById('divParamNew').innerHTML = param;
+		for (var i=0;i<paramsHeuristiqueCut.length-1;i++)
+			addParamHeuristique(paramsHeuristiqueCut[i+1]);
+	}
+	else
+	{
+		document.getElementById('divParamNew').style.display="none";
+	}
 }
 
 $(document).on("click", ".deleteParam", function(){

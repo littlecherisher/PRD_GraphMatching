@@ -38,11 +38,19 @@
     float: right;
     margin-bottom: 10px;
 }
+
 #divParam {
     display: inline-block;
     vertical-align: top;
     margin-right: 20px;
-    width: 40%;
+    width: 50%;
+}
+
+#divParamNew {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    width: 30%;
 }
 #boutons{
     float:right;
