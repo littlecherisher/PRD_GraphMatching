@@ -12,6 +12,7 @@ $(document).ready(function () {
         dataTable.fnFilter(this.value);
     });
 });
+
 function modif(id, paramsHeuristique) {
 	if (paramsHeuristique.length>2){
 		document.location.href = '/GraphMatching/FicheMethodeHeuristique?methode=' + id;
