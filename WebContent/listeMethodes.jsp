@@ -38,7 +38,7 @@
         <tbody>
         <c:forEach items="${methodes}" var="methode">
         <tr id=
-                <c:out value="${methode.id}"/> ondblclick='modif(<c:out value="${methode.id}"/>)'>
+                <c:out value="${methode.id}"/> ondblclick='modif(<c:out value="${methode.id}"/>,"<c:out value="${methode.paramsHeuristique}"/>")'>
             <td><c:out value="${methode.nom}"/></td>
             <td><c:out value="${methode.description}"/></td>
             <td><c:out value="${methode.executable}"/></td>

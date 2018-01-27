@@ -12,11 +12,11 @@ $(document).ready(function () {
         dataTable.fnFilter(this.value);
     });
 });
-function modif(methode) {
-	/*if (methode.paramsHeuristique != null) {
-		document.location.href = '/GraphMatching/FicheMethodeHeuristique?methode=' + methode;
-	} else {
-		document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + methode;
-	}*/
-	document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + methode;
+function modif(id, paramsHeuristique) {
+	if (paramsHeuristique.length>2){
+		document.location.href = '/GraphMatching/FicheMethodeHeuristique?methode=' + id;
+	}else{
+		document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + id;
+	}
+	//document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + methode;
 };
