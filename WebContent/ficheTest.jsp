@@ -21,13 +21,16 @@
 </head>
 <body>
 <jsp:include page="index.jsp"/>
+<script type="text/javascript">
+	var buttonFlag = 0;
+</script>
 <br/><br/>
 <c:choose>
     <c:when test="${not empty test}">
-        <h1>Modification du test n° <c:out value="${test.id}"/> :</h1>
+        <h1 id='title'>Modification du test n° <c:out value="${test.id}"/> :</h1>
     </c:when>
     <c:otherwise>
-        <h1>Ajout d'un test :</h1>
+        <h1 id='title'>Ajout d'un test :</h1>
     </c:otherwise>
 </c:choose>
 <form action="/GraphMatching/FicheTest" method="post" id="form" onsubmit="return validForm()">
@@ -48,11 +51,20 @@
                 			</c:if>
 							id=<c:out value="${methode.id}"/> />
 						<td id=<c:out value="${methode.id}"/>
-							onclick='getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>","<c:out value="${methode.paramsHeuristique}"/>")' />
+							onclick='buttonFlag=getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>","<c:out value="${methode.paramsHeuristique}"/>")' />
 						<td><c:out value="${methode.nom}" /></td>
 					</c:forEach>
 				</tbody>
 			</table>
+			<input type='button' id='buttonModification' value='Récupère les paramètres historiques' onclick='buttonFlag = getSelected2(buttonFlag)'>
+			<script type="text/javascript">
+			var titleGet = document.getElementById('title').innerHTML;
+			var titleCut=titleGet.substring(0,12) ;
+			if (titleCut != 'Modification')
+			{
+				document.getElementById('buttonModification').style.display = "none";
+			}
+			</script>
 		</div>
 		<div class="tableau">
         <table id="datasets" name="Datasets" class="display" cellspacing="0">
@@ -123,6 +135,7 @@
         </fieldset>
     </div>
     <br/><br/>
+    
     <c:set var="params" value="${test.getParametres()}"/>
     <div class="tableau">
         <fieldset>
@@ -148,7 +161,7 @@
         <fieldset id="paramSup">
             <legend>Paramètres supplémentaires :</legend>
             <input type="button" value="+ Ajouter" onclick="addParam()">
-            <c:forEach items="${params.keySet()}" var="key">
+            <%-- <c:forEach items="${params.keySet()}" var="key">
                 <c:if test="${key != 'memoire' && key != 'temps' && key != 'tempsHeur' && key != 'tolerence' && key != 'thread'}">
                     <div>
                         <br/><br/>
@@ -159,14 +172,49 @@
                         <input type='button' value='Supprimer' class="deleteParam"/>
                     </div>
                 </c:if>
-            </c:forEach>
+            </c:forEach> --%>
         </fieldset>
     </div>
     <br/><br/>
+    
     <div id="divParamNewLarge">
     	<div id="divParamNew">
+    		<%-- <c:forEach items="${params.keySet()}" var="key">
+                <c:if test="${key != 'memoire' && key != 'temps' && key != 'tempsHeur' && key != 'tolerence' && key != 'thread'}">
+                    <div>
+                        <br/><br/>
+                        <label for="nomsParam[]">Nom : </label>
+                        <input type="text" name="nomsParam[]" id="nomsParam[]" value="<c:out value="${key}"/>"/>
+                        <label for="valeursParam[]">Valeur : </label>
+                        <input type="text" name="valeursParam[]" id="valeursParam[]" value="<c:out value="${params[key]}"/>"/>
+                        <input type='button' value='Supprimer' class="deleteParam"/>
+                    </div>
+                </c:if>
+            </c:forEach> --%>
     	</div>
     </div>
+    
+<!-- 
+    <div id="divParamNewLarge2">
+    	<div id="divParamNew2">
+		<fieldset id="paramSup2">
+            <legend>Paramètres supplémentaires :</legend>
+            <input type="button" value="+ Ajouter" onclick="addParam2()">
+             <c:forEach items="${params.keySet()}" var="key">         
+                  <div>
+                        <br/><br/>
+                        <label for="nomsParam[]">Nom : </label>
+                        <input type="text" name="nomsParam[]" id="nomsParam[]" value="<c:out value="${key}"/>"/>                 
+                        <input type='button' value='Supprimer' class="deleteParam"/>
+                  </div>
+            </c:forEach>
+        </fieldset> 
+             <label for="memoire1" class="labelParam">Mémoire limite (en Mo) :</label>
+             <input type="text" id="memoire1" name="memoire1" value="<c:out value="999"/>">
+    	</div>
+    </div>
+-->
+
     <div id="boutons">
         <input type="submit" value="Enregistrer" name="enregistrer" id="enregistrer" onclick="getSelected()"/>
         <c:if test="${not empty test}">
@@ -182,7 +230,6 @@
             <input type="submit" id="retour" value="Liste des tests">
         </form>
     </div>
-    
 </form>
 </body>
 </html>

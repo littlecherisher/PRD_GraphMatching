@@ -4,11 +4,17 @@
 
 function addParamHeuristique(){
     const paramHeu = "<div></br></br>" +
-        "<label for='nomsParam[]'>Nom : </label>" +
-        "<input type='text' name='nomsParam[]' id='nomsParam[]'/> " +
-        "<label for='typesParam[]'>Type : </label>" +
-        "<input type='text' name='typesParam[]' id='typesParam[]'/> " + 
-        "<input class='deleteParam' type='button' value='Supprimer'/></div>";
+        "<label for='nomsParamHeu[]'>Nom : </label>" +
+        "<input type='text' name='nomsParamHeu[]' id='nomsParamHeu[]'/> " +
+        //"<label for='typesParamHeu[]'>Type : </label>" +
+        //"<input type='text' name='typesParamHeu[]' id='typesParam[]'/> " + 
+        "&nbsp<label for='typesParamHeu[]'>Type : </label>"+
+    	"<select name='typesParamHeu[]' id='typesParamHeu[]' style='width:100px;font-size:15px' size='1' value='1'>"+
+    			"<option value='int' >int</option>"+
+    			"<option value='float' >float</option>"+
+    			"<option value='string' >string</option>"+
+    	"</select>"+
+        "&nbsp&nbsp<input class='deleteParam' type='button' value='Supprimer'/></div>";
     $('#paramNec').append(paramHeu);
 }
 

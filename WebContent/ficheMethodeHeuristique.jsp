@@ -49,19 +49,43 @@
     <label for="description" class="label">Description : </label>
     <textarea id="description" name="description"><c:out value="${methode.description}"/></textarea>
     <br/><br/>
+    
+    <c:set var="paramsHeuristique" value="${methode.getParametresHeuristique()}"/>
     <div id="divParam">
         <fieldset id="paramNec">
             <legend>Paramètres nécessaires :</legend>
             <input type="button" value="+ Ajouter" onclick="addParamHeuristique()">
-            <%-- <c:forEach items="${params.keySet()}" var="key">
+            <c:forEach items="${paramsHeuristique.keySet()}" var="key">    		
                     <div>
-                        <label for="nomsParam[]">Nom : </label>
-                        <input type="text" name="nomsParam[]" id="nomsParam[]" value="<c:out value="${key}"/>"/>
-                        <label for="typesParam[]">Type : </label>
-                        <input type="text" name="typesParam[]" id="typesParam[]" value="<c:out value="${params[key]}"/>"/>
-						</select> <input type='button' value='Supprimer' class="deleteParam"/>
+                    	<br/><br/>
+                        <label for="nomsParamHeu[]">Nom : </label>
+                        <input type="text" name="nomsParamHeu[]" id="nomsParamHeu[]" value="<c:out value="${key}"/>"/>                  
+        				&nbsp<label for="typesParamHeu[]">Type : </label>
+        				<c:set var="paramsHeuristique2" value="${paramsHeuristique.get(key)}"/>
+    					<select name="typesParamHeu[]" id="typesParamHeu[]" style="width:100px;font-size:15px" size="1">
+    						<%-- value="<c:out value="${paramsHeuristique.get(key)}"/>" --%>											
+    						<!-- <option value="int" >int</option>
+    						<option value="float" >float</option>
+    						<option value="string" >string</option> -->
+    						<c:if test='${paramsHeuristique2 == "int"}'>
+                            		<option value="int" selected="selected">int</option>
+    								<option value="float" >float</option>
+    								<option value="string" >string</option>
+                        	</c:if>
+    						<c:if test='${paramsHeuristique2 == "float"}'>
+                            		<option value="int">int</option>
+    								<option value="float" selected="selected">float</option>
+    								<option value="string" >string</option>
+                        	</c:if>
+                        	<c:if test='${paramsHeuristique2 == "string"}'>
+                            		<option value="int">int</option>
+    								<option value="float" >float</option>
+    								<option value="string" selected="selected">string</option>
+                        	</c:if>
+    					</select>
+        				&nbsp&nbsp<input class="deleteParam" type="button" value="Supprimer"/>
                     </div>
-            </c:forEach> --%>
+            </c:forEach>
         </fieldset>
     </div>
     <div id="boutons">

@@ -4,6 +4,7 @@ import Dao.DatasetDAO;
 import Dao.MethodeDAO;
 import Dao.TestDAO;
 import Model.Test;
+import Model.Methode;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Servlet FicheTest permettant l'ajout, la modification et l'affichage d'un Test
@@ -62,6 +64,10 @@ public class FicheTestServlet extends HttpServlet {
         String mode = req.getParameter("mode");
         String[] NomsParam = req.getParameterValues("nomsParam[]");
         String[] ValeursParam = req.getParameterValues("valeursParam[]");
+        
+        String[] NomsParamHeu = req.getParameterValues("nomsParamHeu[]");     
+        String[] ValeursParamHeu = req.getParameterValues("valeursParamHeu[]");
+        
         String[] methodes = req.getParameterValues("selectedMethode[]");
         String[] data = req.getParameterValues("selectedData[]");
         String memoire = req.getParameter("memoire");
@@ -81,6 +87,11 @@ public class FicheTestServlet extends HttpServlet {
             if (NomsParam != null) for (int i = 0; i < NomsParam.length; i++) {
                 test.addParam(NomsParam[i], ValeursParam[i]);
             }
+            
+            if (ValeursParamHeu != null) for (int j = 0; j < ValeursParamHeu.length; j++) {
+                test.addParam(NomsParamHeu[j], ValeursParamHeu[j]);
+            }
+            
             if (memoire != "") test.addParam("memoire", memoire);
             if (temps != "") test.addParam("temps", temps);
             if (tempsHeur != "") test.addParam("tempsHeur", tempsHeur);
@@ -102,6 +113,11 @@ public class FicheTestServlet extends HttpServlet {
             if (NomsParam != null) for (int i = 0; i < NomsParam.length; i++) {
                 test.addParam(NomsParam[i], ValeursParam[i]);
             }
+            
+            if (ValeursParamHeu != null) for (int j = 0; j < ValeursParamHeu.length; j++) {
+                test.addParam(NomsParamHeu[j], ValeursParamHeu[j]);
+            }
+            
             if (memoire != "") test.addParam("memoire", memoire);
             if (temps != "") test.addParam("temps", temps);
             if (tempsHeur != "") test.addParam("tempsHeur", tempsHeur);

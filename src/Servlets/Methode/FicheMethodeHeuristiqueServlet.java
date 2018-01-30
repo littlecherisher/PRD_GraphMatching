@@ -75,17 +75,27 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
         Part part = req.getPart("file");
         String fichier = getNomFichier(part);
         InputStream file = part.getInputStream();
-        String[] NomsParam = req.getParameterValues("nomsParam[]");
-        String[] TypesParam = req.getParameterValues("typesParam[]");
+        String[] NomsParamHeu = req.getParameterValues("nomsParamHeu[]");
+        String[] TypesParamHeu = req.getParameterValues("typesParamHeu[]");
         Methode methode;
         MethodeDAO methodeDao = new MethodeDAO();
         if (!id.isEmpty()) {
             //modification du modèle
         	methode = methodeDao.get(Long.parseLong(id));
+        	methode.clearLists();
         	//gestion des paramètres heuristiques
-            if (NomsParam != null) for (int i = 0; i < NomsParam.length; i++) {
-                methode.addParamHeuristique(NomsParam[i], TypesParam[i]);
+            if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
+                methode.addParamHeuristique(NomsParamHeu[i], TypesParamHeu[i]);
             }
+            
+            /*if (TypesParamHeu != null) for (int i = 0; i < TypesParamHeu.length; i++) {
+                methode.addParamHeuristiqueType(TypesParamHeu[i]);
+            }*/
+            
+            if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
+                methode.addParamHeuris(NomsParamHeu[i], TypesParamHeu[i]);
+            }
+            
             if (!nom.equals(methode.getNom())) methode.setNom(nom);
             if (!description.equals(methode.getDescription())) methode.setDescription(description);
             if (!fichier.isEmpty()) {
@@ -101,9 +111,17 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
         	methode = new Methode(nom, description);
         	methodeDao.save(methode);
         	//gestion des paramètres heuristiques
-            if (NomsParam != null) for (int i = 0; i < NomsParam.length; i++) {
-                methode.addParamHeuristique(NomsParam[i], TypesParam[i]);
+            if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
+                methode.addParamHeuristique(NomsParamHeu[i], TypesParamHeu[i]);
             }
+            
+            /*if (TypesParamHeu != null) for (int i = 0; i < TypesParamHeu.length; i++) {
+                methode.addParamHeuristiqueType(TypesParamHeu[i]);
+            }*/
+            if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
+                methode.addParamHeuris(NomsParamHeu[i], TypesParamHeu[i]);
+            }
+            
             if (!fichier.isEmpty()) {
                 try {
                 	methode.setExecutable(file, fichier);

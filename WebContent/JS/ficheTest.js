@@ -53,6 +53,16 @@ function addParam() {
 	$('#paramSup').append(param);
 }
 
+function addParam2() {
+	const
+	param = "<div></br></br>"
+			+ "<label for='nomsParam[]'> Nom : </label>"
+			+ "<input type='text' name='nomsParam[]' id='nomsParam[]'/> "
+			+ "<input class='deleteParam' type='button' value='Supprimer'/></div>";
+	$('#paramSup2').append(param);
+}
+
+/*
 function addParamHeuristique(nomtype) {
 	const paramHeuristique = "<div></br></br>"
 			+ "<label for='nom' class='label'>"
@@ -60,7 +70,16 @@ function addParamHeuristique(nomtype) {
 			+ " :</label>"
 			+ "<input type='text' name='valeur' id='valeur' required='required'/> "
 	$('#paramNecH').append(paramHeuristique);
+}*/
+
+function addParamHeuristique(nomtype,i) {
+	const paramHeuristique = "<div></br></br>" + 
+			"<input type='text' name='nomsParamHeu[]' id='nomsParamHeu[]' style='border:0px;font-size:14px' size='12' readonly='readonly'>" + " : " + "</input>" +
+			"<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' required='required'/> ";
+	$('#paramNecH').append(paramHeuristique);
+	document.getElementById('nomsParamHeu[]').id = "**" + i;
 }
+
 
 function getParams(id, nom, paramsHeuristique) {
 	//alert('start');
@@ -83,13 +102,14 @@ function getParams(id, nom, paramsHeuristique) {
 	//for (var i = 0; i < paramsHeuristiqueCut.length; i++) {
 		//alert(paramsHeuristiqueCut[i]);
 	//}		
-	var divid = "##" + nom;
+	var divid = "##" + id;
 	if (checkboxSelect.indexOf("selected") > -1) 
 	{
 		if (paramsHeuristique.length > 2)
+		{
 			document.getElementById(divid).style.display = "none";
 			document.getElementById(divid).id = "delete";
-
+		}
 	} 
 	else
 	{
@@ -104,32 +124,81 @@ function getParams(id, nom, paramsHeuristique) {
 			    	"<c:forEach items='${params.keySet()}' var='key'>"+             
 			            "<div>"+
 			               "<br/><br/>"+  
-			               "<label for='nom' class='label'>" +  paramsHeuristiqueCut[0] + " : " + "</label>" +
-			               "<input type='text' name='valeur' id='valeur' required='required' value=''${key}'/>"+      
+			               "<input type='text' name='nomsParamHeu[]' id='**0' style='border:0px;font-size:14px' size='12' readonly='readonly'>" + " : " + "</input>" +
+			               //"<label for='nom' class='label'>" +  paramsHeuristiqueCut[0] + " : " + "</label>" +
+			               "<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' required='required' value=''${key}'/>"+    
 			             "</div>"+
 			        "</c:forEach>"+		        
 			   "</fieldset>"+
 			"</div>";
-			//$('#divParamNew').append(param);
+			//$('#divParamNew').append(param);	
 			document.getElementById('divParamNew').innerHTML = param;
 			for (var i = 0; i < paramsHeuristiqueCut.length - 1; i++)
-				addParamHeuristique(paramsHeuristiqueCut[i + 1]);
+				addParamHeuristique(paramsHeuristiqueCut[i + 1],i+1);		
 			const paramNew = document.getElementById('divParamNew').innerHTML;
 			document.getElementById('divParamNew').innerHTML = "";
 			$('#divParamNewLarge').append(paramNew);
 			//$('#divParamNew').append(paramNew);
 			//document.getElementById('divParamNew').innerHTML = paramNew;
-			document.getElementById('divParamNew2').id = "##" + nom;
+			document.getElementById('divParamNew2').id = "##" + id;
+			for (var i = 0; i < paramsHeuristiqueCut.length ; i++)
+			{
+				document.getElementById('**'+i).value = paramsHeuristiqueCut[i];
+				document.getElementById('**'+i).id = 'already';
+			}
+
 		} else {
 			//说明：打开下一行代码（根据需求自行调整），获得功能：在选择一个带参数的方法后，再选择一个不带参数的方法，上一个方法的参数输入框消失
 			//document.getElementById('divParamNew').style.display = "none";
 		}
 	}
+	return 2;
 }
 
 $(document).on("click", ".deleteParam", function() {
 	$(this).closest("div").remove();
 });
+
+function getParams2(id,nom,paramsHeuristique) {
+	//alert('start');
+	var newParamsHeuristique = paramsHeuristique.substring(1,paramsHeuristique.length - 1);
+	paramsHeuristiqueCut = newParamsHeuristique.split(",");
+	if (paramsHeuristique.length > 2) {
+		//alert(paramsHeuristiqueCut.length);
+		document.getElementById('divParamNew').style.display = "";
+		const param =
+		"<div id='divParamNew2'>"+
+		    "<fieldset id='paramNecH'>"+
+		    "<legend id='divParamNew3'>Veuillez entrer les valeurs de paramètre nécessaires pour " + nom + " :</legend>" +
+		    //"<input type='button' value='Valider' onclick='upParamHeuristique()'>"+//bouton de Valider
+		    	"<c:forEach items='${params.keySet()}' var='key'>"+             
+		            "<div>"+
+		               "<br/><br/>"+  
+		               "<input type='text' name='nomsParamHeu[]' id='**0' style='border:0px;font-size:14px' size='12' readonly='readonly'>" + " : " + "</input>" +
+		               //"<label for='nom' class='label'>" +  paramsHeuristiqueCut[0] + " : " + "</label>" +
+		               "<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' required='required' value=''${key}'/>"+    
+		             "</div>"+
+		        "</c:forEach>"+		        
+		   "</fieldset>"+
+		"</div>";
+		//$('#divParamNew').append(param);	
+		document.getElementById('divParamNew').innerHTML = param;
+		for (var i = 0; i < paramsHeuristiqueCut.length - 1; i++)
+			addParamHeuristique(paramsHeuristiqueCut[i + 1],i+1);		
+		const paramNew = document.getElementById('divParamNew').innerHTML;
+		document.getElementById('divParamNew').innerHTML = "";
+		$('#divParamNewLarge').append(paramNew);
+		//$('#divParamNew').append(paramNew);
+		//document.getElementById('divParamNew').innerHTML = paramNew;
+		document.getElementById('divParamNew2').id = "##" + id;
+		for (var i = 0; i < paramsHeuristiqueCut.length ; i++)
+		{
+			document.getElementById('**'+i).value = paramsHeuristiqueCut[i];
+			document.getElementById('**'+i).id = 'already';
+		}
+
+	} 
+}
 
 function getSelected() {
 	const
@@ -151,6 +220,47 @@ function getSelected() {
 						+ selectedData[i].id + "'/>");
 	}
 }
+
+function getSelected2(buttonFlag) {
+	if(buttonFlag == 1)
+	{
+		alert("Vous avez obtenu les paramètres historiques de cette méthode et vous n'avez pas besoin de la récupérer à plusieurs reprises.");	
+		return buttonFlag;
+	}
+	if(buttonFlag == 2)
+	{
+		alert("Vous avez changé la méthode sous ce test.");	
+		return buttonFlag;
+	}
+	const
+	selectedMethodes = $('#methodes').DataTable().rows({
+		selected : true
+	}).nodes();
+	for (var i = 0; i < selectedMethodes.length; i++) {
+		var str = selectedMethodes[i].innerHTML;
+		//alert(str);
+		var x=str.indexOf('getParams(');
+		var y=str.indexOf('class=');
+		var str1=str.substring(x+10,y-4) 
+		strCut = str1.split(";");
+		var x1=strCut[1].indexOf('&quot');
+		var strCut1=strCut[1].substring(0,x1);
+		//alert(strCut1);
+		var y1=strCut[3].indexOf('&quot');
+		var strCut3=strCut[3].substring(0,y1);
+		//alert(strCut3);
+		var titleGet = document.getElementById('title').innerHTML;
+		var titleCut=titleGet.substring(0,12) ;
+		if(titleCut == 'Modification')
+		{
+			getParams2(selectedMethodes[i].id,strCut1,strCut3);
+		}    
+		
+	}
+	buttonFlag = 1 ;
+	return buttonFlag;
+}
+
 function validForm() {
 	const
 	selectedMethodes = $('#methodes').DataTable().rows({
