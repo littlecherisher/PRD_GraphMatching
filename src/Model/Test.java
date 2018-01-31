@@ -73,6 +73,12 @@ public class Test {
      */
     @ElementCollection
     private List<String> params;
+    
+    /**
+     * Liste des paramètres heuristiques du Test sous forme nom=valeur
+     */
+    @ElementCollection
+    private List<String> paramsHeu;
 
     /**
      * Constructeur par défaut de la classe Test
@@ -93,6 +99,7 @@ public class Test {
         datasets = new ArrayList<>();
         methodes = new ArrayList<>();
         params = new ArrayList<>();
+        paramsHeu = new ArrayList<>();
         subsets = new ArrayList<>();
         visible = true;
     }
@@ -236,6 +243,15 @@ public class Test {
     public void addParam(String nom, String valeur) {
         if (!nom.isEmpty() && !valeur.isEmpty()) params.add(nom + " = " + valeur);
     }
+    
+    /**
+     * Ajoute un paramètre à la liste
+     * @param nom nom_type du paramètre heuristique
+     * @param valeur valeur du paramètre
+     */
+    public void addParamHeu(String nom, String valeur) {
+        if (!nom.isEmpty() && !valeur.isEmpty()) paramsHeu.add(nom + " = " + valeur);
+    }
 
     /**
      * Vide les listes des Methode, Dataset, Subset et paramètres
@@ -245,6 +261,7 @@ public class Test {
         datasets.clear();
         subsets.clear();
         params.clear();
+        paramsHeu.clear();
     }
 
     /**
@@ -273,6 +290,10 @@ public class Test {
             if(params.size() > 0) {
                 path = Paths.get(path.toString(), "param.txt");
                 Files.write(path, params, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
+            }
+            if(paramsHeu.size() > 0) {
+                path = Paths.get(path.toString(), "paramHeu.txt");
+                Files.write(path, paramsHeu, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
             }
         } catch (IOException e) {
             e.printStackTrace();

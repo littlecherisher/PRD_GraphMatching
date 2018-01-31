@@ -165,7 +165,14 @@ public class Methode{
     /**
      * Vide les listes des paramètres heuristiques
      */
-    public void clearLists() {
+    public void clearListsHeuristique() {
+    	paramsHeuristique.clear();
+    }
+    
+    /**
+     * Vide les listes des paramètres heuristiques
+     */
+    public void clearListsHeuris() {
     	paramsHeuris.clear();
     }
     

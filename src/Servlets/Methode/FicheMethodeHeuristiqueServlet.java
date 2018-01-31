@@ -82,7 +82,8 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
         if (!id.isEmpty()) {
             //modification du modèle
         	methode = methodeDao.get(Long.parseLong(id));
-        	methode.clearLists();
+        	methode.clearListsHeuristique();
+        	methode.clearListsHeuris();
         	//gestion des paramètres heuristiques
             if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
                 methode.addParamHeuristique(NomsParamHeu[i], TypesParamHeu[i]);

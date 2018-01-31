@@ -89,7 +89,7 @@ public class FicheTestServlet extends HttpServlet {
             }
             
             if (ValeursParamHeu != null) for (int j = 0; j < ValeursParamHeu.length; j++) {
-                test.addParam(NomsParamHeu[j], ValeursParamHeu[j]);
+                test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
             }
             
             if (memoire != "") test.addParam("memoire", memoire);
@@ -115,7 +115,7 @@ public class FicheTestServlet extends HttpServlet {
             }
             
             if (ValeursParamHeu != null) for (int j = 0; j < ValeursParamHeu.length; j++) {
-                test.addParam(NomsParamHeu[j], ValeursParamHeu[j]);
+                test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
             }
             
             if (memoire != "") test.addParam("memoire", memoire);

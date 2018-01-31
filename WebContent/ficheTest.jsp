@@ -1,7 +1,6 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: kevmi
-  Date: 19/01/2017
+  User: Kai 
+  Date: 27/01/2018
   Time: 14:39
   To change this template use File | Settings | File Templates.
 --%>
@@ -161,7 +160,7 @@
         <fieldset id="paramSup">
             <legend>Paramètres supplémentaires :</legend>
             <input type="button" value="+ Ajouter" onclick="addParam()">
-            <%-- <c:forEach items="${params.keySet()}" var="key">
+            <c:forEach items="${params.keySet()}" var="key">
                 <c:if test="${key != 'memoire' && key != 'temps' && key != 'tempsHeur' && key != 'tolerence' && key != 'thread'}">
                     <div>
                         <br/><br/>
@@ -172,7 +171,7 @@
                         <input type='button' value='Supprimer' class="deleteParam"/>
                     </div>
                 </c:if>
-            </c:forEach> --%>
+            </c:forEach>
         </fieldset>
     </div>
     <br/><br/>
