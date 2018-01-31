@@ -170,7 +170,7 @@ public class Methode{
     }
     
     /**
-     * Vide les listes des paramètres heuristiques
+     * Vide les listes HashMap des paramètres heuristiques
      */
     public void clearListsHeuris() {
     	paramsHeuris.clear();
@@ -192,7 +192,7 @@ public class Methode{
      */
     public void addParamHeuristique(String nom, String type) {
         if (!nom.isEmpty() && !type.isEmpty()) 
-        	paramsHeuristique.add(nom + "_" + type);
+        	paramsHeuristique.add(nom + "--type--" + type);
     }
     
     /**
@@ -222,7 +222,7 @@ public class Methode{
     public HashMap<String, String> getParametresHeuristique() {
         HashMap<String, String> parametresHeuristique = new HashMap<>();
         for (String s : paramsHeuristique) {
-            String[] split = s.split("_");
+            String[] split = s.split("--type--");
             if(split.length > 1) {
             	//split[1].split(")");
             	parametresHeuristique.put(split[0], split[1]);

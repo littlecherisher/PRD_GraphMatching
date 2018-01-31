@@ -21,7 +21,7 @@
 <body>
 <jsp:include page="index.jsp"/>
 <script type="text/javascript">
-	var buttonFlag = 0;
+	var countFlag = 0;
 </script>
 <br/><br/>
 <c:choose>
@@ -50,12 +50,19 @@
                 			</c:if>
 							id=<c:out value="${methode.id}"/> />
 						<td id=<c:out value="${methode.id}"/>
-							onclick='buttonFlag=getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>","<c:out value="${methode.paramsHeuristique}"/>")' />
+							onclick='getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>","<c:out value="${methode.paramsHeuristique}"/>")' />
 						<td><c:out value="${methode.nom}" /></td>
+						 <input id="iMethodeNom" name="iMethodeNom" value="${methode.nom}" style="border:0px;" readonly="readonly"/>
+						 <input id="iMethodeParamsHeuristique" name="iMethodeParamsHeuristique" value="${methode.paramsHeuristique}" style="border:0px;" readonly="readonly"/>
+						 <script type="text/javascript">
+						 	countFlag++;
+						 	document.getElementById('iMethodeNom').id = "#nom#" + ${methode.id};
+						 	document.getElementById('iMethodeParamsHeuristique').id = "#params#" + ${methode.id};
+						 </script>
 					</c:forEach>
 				</tbody>
 			</table>
-			<input type='button' id='buttonModification' value='Récupère les paramètres historiques' onclick='buttonFlag = getSelected2(buttonFlag)'>
+			<!-- <input type='button' id='buttonModification' value='Récupère les paramètres historiques' onclick='buttonFlag = getSelected2(buttonFlag)'> -->
 			<script type="text/javascript">
 			var titleGet = document.getElementById('title').innerHTML;
 			var titleCut=titleGet.substring(0,12) ;
@@ -134,7 +141,6 @@
         </fieldset>
     </div>
     <br/><br/>
-    
     <c:set var="params" value="${test.getParametres()}"/>
     <div class="tableau">
         <fieldset>
@@ -178,42 +184,8 @@
     
     <div id="divParamNewLarge">
     	<div id="divParamNew">
-    		<%-- <c:forEach items="${params.keySet()}" var="key">
-                <c:if test="${key != 'memoire' && key != 'temps' && key != 'tempsHeur' && key != 'tolerence' && key != 'thread'}">
-                    <div>
-                        <br/><br/>
-                        <label for="nomsParam[]">Nom : </label>
-                        <input type="text" name="nomsParam[]" id="nomsParam[]" value="<c:out value="${key}"/>"/>
-                        <label for="valeursParam[]">Valeur : </label>
-                        <input type="text" name="valeursParam[]" id="valeursParam[]" value="<c:out value="${params[key]}"/>"/>
-                        <input type='button' value='Supprimer' class="deleteParam"/>
-                    </div>
-                </c:if>
-            </c:forEach> --%>
     	</div>
     </div>
-    
-<!-- 
-    <div id="divParamNewLarge2">
-    	<div id="divParamNew2">
-		<fieldset id="paramSup2">
-            <legend>Paramètres supplémentaires :</legend>
-            <input type="button" value="+ Ajouter" onclick="addParam2()">
-             <c:forEach items="${params.keySet()}" var="key">         
-                  <div>
-                        <br/><br/>
-                        <label for="nomsParam[]">Nom : </label>
-                        <input type="text" name="nomsParam[]" id="nomsParam[]" value="<c:out value="${key}"/>"/>                 
-                        <input type='button' value='Supprimer' class="deleteParam"/>
-                  </div>
-            </c:forEach>
-        </fieldset> 
-             <label for="memoire1" class="labelParam">Mémoire limite (en Mo) :</label>
-             <input type="text" id="memoire1" name="memoire1" value="<c:out value="999"/>">
-    	</div>
-    </div>
--->
-
     <div id="boutons">
         <input type="submit" value="Enregistrer" name="enregistrer" id="enregistrer" onclick="getSelected()"/>
         <c:if test="${not empty test}">
@@ -230,5 +202,29 @@
         </form>
     </div>
 </form>
+<script type="text/javascript">
+	//alert(countFlag);
+	var iMethodeNom = [];
+	var iMethodeParamsHeuristique = [];
+	var j = 0;
+	for (var i=1;i<=countFlag;i++)
+	{	
+		var checkboxSelectNew = document.getElementById(i).className;
+		if( checkboxSelectNew == 'memo' )
+			{	
+					
+				iMethodeNom[j] = document.getElementById('#nom#' + i).value;
+				iMethodeParamsHeuristique[j] = document.getElementById('#params#' + i).value;
+				//alert(iMethodeNom[j]);//打开alert你会看见未消失前的输入框
+				//alert(iMethodeParamsHeuristique[j]);
+				getParams2(i,iMethodeNom[j],iMethodeParamsHeuristique[j]);
+				j++;
+			}
+		document.getElementById('#nom#' + i).style.display = "none";
+		document.getElementById('#params#' + i).style.display = "none";
+		document.getElementById('#nom#' + i).id = "delete2";
+		document.getElementById('#params#' + i).id = "delete3";
+	}
+</script>
 </body>
 </html>

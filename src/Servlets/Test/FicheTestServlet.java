@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Servlet FicheTest permettant l'ajout, la modification et l'affichage d'un Test
@@ -65,7 +66,8 @@ public class FicheTestServlet extends HttpServlet {
         String[] NomsParam = req.getParameterValues("nomsParam[]");
         String[] ValeursParam = req.getParameterValues("valeursParam[]");
         
-        String[] NomsParamHeu = req.getParameterValues("nomsParamHeu[]");     
+        String[] NomsParamHeu = req.getParameterValues("nomsParamHeu[]");  
+        String[] TypesParamHeu = req.getParameterValues("typesParamHeu[]");     
         String[] ValeursParamHeu = req.getParameterValues("valeursParamHeu[]");
         
         String[] methodes = req.getParameterValues("selectedMethode[]");
@@ -74,7 +76,8 @@ public class FicheTestServlet extends HttpServlet {
         String temps = req.getParameter("temps");
         String tempsHeur = req.getParameter("tempsHeur");
         String tolerence = req.getParameter("tolerence");
-        String thread = req.getParameter("thread");
+        String thread = req.getParameter("thread");        
+        
         Test test = null;
         if (!id.isEmpty()) {
             //modification du test
@@ -83,15 +86,19 @@ public class FicheTestServlet extends HttpServlet {
             if (!description.equals(test.getDescription())) test.setDescription(description);
             if (!mode.equals(test.getMode())) test.setMode(Integer.parseInt(mode));
             test.clearLists();
+            test.clearListsHeuris();
             //gestion des paramètres
             if (NomsParam != null) for (int i = 0; i < NomsParam.length; i++) {
                 test.addParam(NomsParam[i], ValeursParam[i]);
-            }
+            }  
             
-            if (ValeursParamHeu != null) for (int j = 0; j < ValeursParamHeu.length; j++) {
-                test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
+            if (NomsParamHeu != null) for (int j = 0; j < NomsParamHeu.length; j++) {
+            	StringBuilder sb = new StringBuilder(NomsParamHeu[j]);
+            	sb.insert(NomsParamHeu[j].length(), " = ");
+            	NomsParamHeu[j] = sb + ValeursParamHeu[j];
+            	test.addParamHeuris(NomsParamHeu[j], TypesParamHeu[j]);
             }
-            
+           
             if (memoire != "") test.addParam("memoire", memoire);
             if (temps != "") test.addParam("temps", temps);
             if (tempsHeur != "") test.addParam("tempsHeur", tempsHeur);
@@ -114,8 +121,11 @@ public class FicheTestServlet extends HttpServlet {
                 test.addParam(NomsParam[i], ValeursParam[i]);
             }
             
-            if (ValeursParamHeu != null) for (int j = 0; j < ValeursParamHeu.length; j++) {
-                test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
+            if (NomsParamHeu != null) for (int j = 0; j < NomsParamHeu.length; j++) {
+            	StringBuilder sb = new StringBuilder(NomsParamHeu[j]);
+            	sb.insert(NomsParamHeu[j].length(), " = ");
+            	NomsParamHeu[j] = sb + ValeursParamHeu[j];
+            	test.addParamHeuris(NomsParamHeu[j], TypesParamHeu[j]);
             }
             
             if (memoire != "") test.addParam("memoire", memoire);

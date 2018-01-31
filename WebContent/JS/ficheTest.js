@@ -53,31 +53,14 @@ function addParam() {
 	$('#paramSup').append(param);
 }
 
-function addParam2() {
-	const
-	param = "<div></br></br>"
-			+ "<label for='nomsParam[]'> Nom : </label>"
-			+ "<input type='text' name='nomsParam[]' id='nomsParam[]'/> "
-			+ "<input class='deleteParam' type='button' value='Supprimer'/></div>";
-	$('#paramSup2').append(param);
-}
-
-/*
-function addParamHeuristique(nomtype) {
-	const paramHeuristique = "<div></br></br>"
-			+ "<label for='nom' class='label'>"
-			+ nomtype
-			+ " :</label>"
-			+ "<input type='text' name='valeur' id='valeur' required='required'/> "
-	$('#paramNecH').append(paramHeuristique);
-}*/
-
 function addParamHeuristique(nomtype,i) {
 	const paramHeuristique = "<div></br></br>" + 
-			"<input type='text' name='nomsParamHeu[]' id='nomsParamHeu[]' style='border:0px;font-size:14px' size='12' readonly='readonly'>" + " : " + "</input>" +
-			"<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' required='required'/> ";
+			"<input type='text' name='nomsParamHeu[]' id='nomsParamHeu[]' style='border:0px;font-size:14px' size='12' readonly='readonly'></input>" +
+			"<input type='text' name='typesParamHeu[]' id='typesParamHeu[]' style='border:0px;font-size:14px' size='1' readonly='readonly'>" + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "</input>" +
+			"<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' style='font-size:14px' size='10' required='required'/> ";
 	$('#paramNecH').append(paramHeuristique);
 	document.getElementById('nomsParamHeu[]').id = "**" + i;
+	document.getElementById('typesParamHeu[]').id = "***" + i;
 }
 
 
@@ -86,7 +69,22 @@ function getParams(id, nom, paramsHeuristique) {
 	var newParamsHeuristique = paramsHeuristique.substring(1,paramsHeuristique.length - 1);
 	paramsHeuristiqueCut = newParamsHeuristique.split(",");
 	var checkboxSelect = document.getElementById(id).className;
-	var list = document.getElementsByTagName("input");
+	for (var i = 1; i < paramsHeuristiqueCut.length ; i++)
+	{
+		paramsHeuristiqueCut[i]=paramsHeuristiqueCut[i].substring(1);
+	}
+    var paramsHeuristiqueDouble = [];
+    for (var k = 0; k < paramsHeuristiqueCut.length; k++) {
+    	paramsHeuristiqueDouble[k] = [];
+    }
+	for (var i = 0; i < paramsHeuristiqueCut.length ; i++)
+	{
+		var a=paramsHeuristiqueCut[i].indexOf('--type--');
+		paramsHeuristiqueDouble[i][0]=paramsHeuristiqueCut[i].substring(0,a);
+		paramsHeuristiqueDouble[i][1]=paramsHeuristiqueCut[i].substring(a+8);
+		//paramsHeuristiqueDouble[i][2]=paramsHeuristiqueDouble[i][0].length;
+	}
+	//var list = document.getElementsByTagName("input");
 	/*
 	for (var i = 0; i < list.length; i++) {
 		if (list[i].type == "text" && list[i].value == "" && list[i].name == "valeur" && checkboxSelect.indexOf("selected") <= -1 && paramsHeuristique.length > 2) 
@@ -107,8 +105,10 @@ function getParams(id, nom, paramsHeuristique) {
 	{
 		if (paramsHeuristique.length > 2)
 		{
-			document.getElementById(divid).style.display = "none";
-			document.getElementById(divid).id = "delete";
+			var mybox = document.getElementById(divid);  
+			mybox.parentNode.removeChild(mybox); 
+			//document.getElementById(divid).style.display = "none";
+			//document.getElementById(divid).id = "delete";
 		}
 	} 
 	else
@@ -124,9 +124,11 @@ function getParams(id, nom, paramsHeuristique) {
 			    	"<c:forEach items='${params.keySet()}' var='key'>"+             
 			            "<div>"+
 			               "<br/><br/>"+  
-			               "<input type='text' name='nomsParamHeu[]' id='**0' style='border:0px;font-size:14px' size='12' readonly='readonly'>" + " : " + "</input>" +
-			               //"<label for='nom' class='label'>" +  paramsHeuristiqueCut[0] + " : " + "</label>" +
-			               "<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' required='required' value=''${key}'/>"+    
+			               "<label>" +  "Nom&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "Type&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +  "Valeur"  + "</label>" +
+			               "<br/><br/>"+ 
+			               "<input type='text' name='nomsParamHeu[]' id='**0' style='border:0px;font-size:14px' size='12' readonly='readonly'></input>" +
+			               "<input type='text' name='typesParamHeu[]' id='***0' style='border:0px;font-size:14px' size='1' readonly='readonly'>" + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "</input>" +               
+			               "<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' style='font-size:14px' size='10' required='required' value=''${key}'/>"+    
 			             "</div>"+
 			        "</c:forEach>"+		        
 			   "</fieldset>"+
@@ -143,8 +145,11 @@ function getParams(id, nom, paramsHeuristique) {
 			document.getElementById('divParamNew2').id = "##" + id;
 			for (var i = 0; i < paramsHeuristiqueCut.length ; i++)
 			{
-				document.getElementById('**'+i).value = paramsHeuristiqueCut[i];
+				document.getElementById('**'+i).value = paramsHeuristiqueDouble[i][0];
+				document.getElementById('***'+i).value = paramsHeuristiqueDouble[i][1];
+				//document.getElementById('**'+i).style.size = 1+'px';
 				document.getElementById('**'+i).id = 'already';
+				document.getElementById('***'+i).id = 'already2';
 			}
 
 		} else {
@@ -152,7 +157,6 @@ function getParams(id, nom, paramsHeuristique) {
 			//document.getElementById('divParamNew').style.display = "none";
 		}
 	}
-	return 2;
 }
 
 $(document).on("click", ".deleteParam", function() {
@@ -163,6 +167,21 @@ function getParams2(id,nom,paramsHeuristique) {
 	//alert('start');
 	var newParamsHeuristique = paramsHeuristique.substring(1,paramsHeuristique.length - 1);
 	paramsHeuristiqueCut = newParamsHeuristique.split(",");
+	for (var i = 1; i < paramsHeuristiqueCut.length ; i++)
+	{
+		paramsHeuristiqueCut[i]=paramsHeuristiqueCut[i].substring(1);
+	}
+    var paramsHeuristiqueDouble = [];
+    for (var k = 0; k < paramsHeuristiqueCut.length; k++) {
+    	paramsHeuristiqueDouble[k] = [];
+    }
+	for (var i = 0; i < paramsHeuristiqueCut.length ; i++)
+	{
+		var a=paramsHeuristiqueCut[i].indexOf('--type--');
+		paramsHeuristiqueDouble[i][0]=paramsHeuristiqueCut[i].substring(0,a);
+		paramsHeuristiqueDouble[i][1]=paramsHeuristiqueCut[i].substring(a+8);
+		//paramsHeuristiqueDouble[i][2]=paramsHeuristiqueDouble[i][0].length;
+	}
 	if (paramsHeuristique.length > 2) {
 		//alert(paramsHeuristiqueCut.length);
 		document.getElementById('divParamNew').style.display = "";
@@ -174,9 +193,11 @@ function getParams2(id,nom,paramsHeuristique) {
 		    	"<c:forEach items='${params.keySet()}' var='key'>"+             
 		            "<div>"+
 		               "<br/><br/>"+  
-		               "<input type='text' name='nomsParamHeu[]' id='**0' style='border:0px;font-size:14px' size='12' readonly='readonly'>" + " : " + "</input>" +
-		               //"<label for='nom' class='label'>" +  paramsHeuristiqueCut[0] + " : " + "</label>" +
-		               "<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' required='required' value=''${key}'/>"+    
+		               "<label>" +  "Nom&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "Type&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +  "Valeur"  + "</label>" +
+		               "<br/><br/>"+ 
+		               "<input type='text' name='nomsParamHeu[]' id='**0' style='border:0px;font-size:14px' size='12' readonly='readonly'></input>" +
+		               "<input type='text' name='typesParamHeu[]' id='***0' style='border:0px;font-size:14px' size='1' readonly='readonly'>" + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "</input>" +               
+		               "<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' style='font-size:14px' size='10' required='required' value=''${key}'/>"+    
 		             "</div>"+
 		        "</c:forEach>"+		        
 		   "</fieldset>"+
@@ -193,11 +214,14 @@ function getParams2(id,nom,paramsHeuristique) {
 		document.getElementById('divParamNew2').id = "##" + id;
 		for (var i = 0; i < paramsHeuristiqueCut.length ; i++)
 		{
-			document.getElementById('**'+i).value = paramsHeuristiqueCut[i];
+			document.getElementById('**'+i).value = paramsHeuristiqueDouble[i][0];
+			document.getElementById('***'+i).value = paramsHeuristiqueDouble[i][1];
+			//document.getElementById('**'+i).style.size = 1+'px';
 			document.getElementById('**'+i).id = 'already';
+			document.getElementById('***'+i).id = 'already2';
 		}
 
-	} 
+	}
 }
 
 function getSelected() {
@@ -221,6 +245,7 @@ function getSelected() {
 	}
 }
 
+/*已经被废弃的button
 function getSelected2(buttonFlag) {
 	if(buttonFlag == 1)
 	{
@@ -260,7 +285,7 @@ function getSelected2(buttonFlag) {
 	buttonFlag = 1 ;
 	return buttonFlag;
 }
-
+*/
 function validForm() {
 	const
 	selectedMethodes = $('#methodes').DataTable().rows({

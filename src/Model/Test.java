@@ -5,6 +5,8 @@ import Dao.SubsetDAO;
 import Dao.TestDAO;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.sun.org.apache.xpath.internal.axes.HasPositionalPredChecker;
+
 import javax.persistence.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -14,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
@@ -75,11 +78,11 @@ public class Test {
     private List<String> params;
     
     /**
-     * Liste des paramètres heuristiques du Test sous forme nom=valeur
+     * Liste des paramètres heuristiques du Test sous forme deux colones:type, nom=valeur 
      */
     @ElementCollection
-    private List<String> paramsHeu;
-
+    private Map<String, String> paramsHeu;
+    
     /**
      * Constructeur par défaut de la classe Test
      */
@@ -99,7 +102,8 @@ public class Test {
         datasets = new ArrayList<>();
         methodes = new ArrayList<>();
         params = new ArrayList<>();
-        paramsHeu = new ArrayList<>();
+        paramsHeu = new HashMap<>();
+        //paramsHeuTotal = new HashMap<String, Map<String, String>>();
         subsets = new ArrayList<>();
         visible = true;
     }
@@ -245,14 +249,15 @@ public class Test {
     }
     
     /**
-     * Ajoute un paramètre à la liste
-     * @param nom nom_type du paramètre heuristique
-     * @param valeur valeur du paramètre
+     * Ajoute un paramètre heuristique à la liste (contient nom et type)
+     * @param nom nom du paramètre heuristique
+     * @param valeur valeur du paramètre heuristique
      */
-    public void addParamHeu(String nom, String valeur) {
-        if (!nom.isEmpty() && !valeur.isEmpty()) paramsHeu.add(nom + " = " + valeur);
+    public void addParamHeuris(String nom, String valeur) {
+        if (!nom.isEmpty() && !valeur.isEmpty()) 
+        	paramsHeu.put(nom, valeur);
     }
-
+    
     /**
      * Vide les listes des Methode, Dataset, Subset et paramètres
      */
@@ -261,7 +266,13 @@ public class Test {
         datasets.clear();
         subsets.clear();
         params.clear();
-        paramsHeu.clear();
+    }
+    
+    /**
+     * Vide les listes des Methode, Dataset, Subset et paramètres heuristiques
+     */
+    public void clearListsHeuris() {
+    	paramsHeu.clear();
     }
 
     /**
@@ -291,10 +302,10 @@ public class Test {
                 path = Paths.get(path.toString(), "param.txt");
                 Files.write(path, params, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
             }
-            if(paramsHeu.size() > 0) {
+            /*if(paramsHeu.size() > 0) {
                 path = Paths.get(path.toString(), "paramHeu.txt");
                 Files.write(path, paramsHeu, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
-            }
+            }*/
         } catch (IOException e) {
             e.printStackTrace();
         }
