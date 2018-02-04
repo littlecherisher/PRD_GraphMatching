@@ -5,8 +5,6 @@ import Dao.SubsetDAO;
 import Dao.TestDAO;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.sun.org.apache.xpath.internal.axes.HasPositionalPredChecker;
-
 import javax.persistence.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -72,13 +70,19 @@ public class Test {
     private boolean visible;
 
     /**
-     * Liste des paramètres du Test sous forme nom=valeur
+     * Liste des paramètres du Test sous forme nom=valeur (Pour les méthodes exactes)
      */
     @ElementCollection
     private List<String> params;
     
     /**
-     * Liste des paramètres heuristiques du Test sous forme deux colones:type, nom=valeur 
+     * Liste des paramètres du Test sous forme nom=valeur (Pour les méthodes heuristiques)
+     */
+    @ElementCollection
+    private List<String> paramsH;
+    
+    /**
+     * Liste des paramètres heuristiques du Test sous forme deux colones:type, nom=valeur (Pour les méthodes heuristiques)
      */
     @ElementCollection
     private Map<String, String> paramsHeu;
@@ -102,6 +106,7 @@ public class Test {
         datasets = new ArrayList<>();
         methodes = new ArrayList<>();
         params = new ArrayList<>();
+        paramsH = new ArrayList<>();
         paramsHeu = new HashMap<>();
         //paramsHeuTotal = new HashMap<String, Map<String, String>>();
         subsets = new ArrayList<>();
@@ -240,7 +245,7 @@ public class Test {
     }
 
     /**
-     * Ajoute un paramètre à la liste
+     * Ajoute un paramètre à la liste pour les méthodes exactes
      * @param nom nom du paramètre
      * @param valeur valeur du paramètre
      */
@@ -249,13 +254,22 @@ public class Test {
     }
     
     /**
+     * Ajoute un paramètre à la liste pour les méthodes heuristiques
+     * @param nom nom du paramètre
+     * @param valeur valeur du paramètre
+     */
+    public void addParamHeu(String nom, String valeur) {
+        if (!nom.isEmpty() && !valeur.isEmpty()) paramsH.add(nom + " = " + valeur);
+    }
+    
+    /**
      * Ajoute un paramètre heuristique à la liste (contient nom et type)
      * @param nom nom du paramètre heuristique
      * @param valeur valeur du paramètre heuristique
      */
-    public void addParamHeuris(String nom, String valeur) {
-        if (!nom.isEmpty() && !valeur.isEmpty()) 
-        	paramsHeu.put(nom, valeur);
+    public void addParamHeuris(String nomType, String valeur) {
+        if (!nomType.isEmpty() && !valeur.isEmpty()) 
+        	paramsHeu.put(nomType, valeur);
     }
     
     /**
@@ -272,16 +286,30 @@ public class Test {
      * Vide les listes des Methode, Dataset, Subset et paramètres heuristiques
      */
     public void clearListsHeuris() {
+    	paramsH.clear();
     	paramsHeu.clear();
     }
 
     /**
-     * Renvoie les paramètres sous la forme d'un HashMap
+     * Renvoie les paramètres exactes sous la forme d'un HashMap
      * @return paramètres sous la forme d'un HashMap
      */
     public HashMap<String, String> getParametres() {
         HashMap<String, String> parametres = new HashMap<>();
         for (String s : params) {
+            String[] split = s.split(" = ");
+            if(split.length > 1) parametres.put(split[0], split[1]);
+        }
+        return parametres;
+    }
+    
+    /**
+     * Renvoie les paramètres heuristiques sous la forme d'un HashMap
+     * @return paramètres sous la forme d'un HashMap
+     */
+    public HashMap<String, String> getParametresHeuristique() {
+        HashMap<String, String> parametres = new HashMap<>();
+        for (String s : paramsH) {
             String[] split = s.split(" = ");
             if(split.length > 1) parametres.put(split[0], split[1]);
         }

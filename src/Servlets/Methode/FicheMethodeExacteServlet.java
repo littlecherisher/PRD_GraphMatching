@@ -68,7 +68,7 @@ public class FicheMethodeExacteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF8");
         resp.setCharacterEncoding("UTF8");
-        //récupération des paramètres
+        //récupération des informations de la méthode 
         String id = req.getParameter("methode");
         String nom = req.getParameter("nom");
         String description = req.getParameter("description");
@@ -78,10 +78,11 @@ public class FicheMethodeExacteServlet extends HttpServlet {
         Methode methode;
         MethodeDAO methodeDao = new MethodeDAO();
         if (!id.isEmpty()) {
-            //modification du modèle
+            //modification de la méthode
         	methode = methodeDao.get(Long.parseLong(id));
             if (!nom.equals(methode.getNom())) methode.setNom(nom);
             if (!description.equals(methode.getDescription())) methode.setDescription(description);
+            methode.setType("exacte");
             if (!fichier.isEmpty()) {
                 try {
                 	methode.setExecutable(file, fichier);
@@ -91,9 +92,10 @@ public class FicheMethodeExacteServlet extends HttpServlet {
             }
             methodeDao.update(methode);
         } else {
-            //création du modèle
+            //création de la méthode
         	methode = new Methode(nom, description);
         	methodeDao.save(methode);
+        	methode.setType("exacte");
             if (!fichier.isEmpty()) {
                 try {
                 	methode.setExecutable(file, fichier);
@@ -103,7 +105,7 @@ public class FicheMethodeExacteServlet extends HttpServlet {
                 }
             }
         }
-        //réaffichage de la fiche du modèle ajouté ou modifié
+        //réaffichage de la fiche de la méthode ajoutée ou modifiée
         req.setAttribute("methode", methode);
         this.getServletContext().getRequestDispatcher("/ficheMethodeExacte.jsp").forward(req, resp);
     }

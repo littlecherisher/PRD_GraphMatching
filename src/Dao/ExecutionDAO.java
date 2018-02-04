@@ -16,7 +16,7 @@ import java.util.List;
 public class ExecutionDAO extends DAO<Execution> {
 
     /**
-     *récupère un objet Execution de la base de données suivant son identifiant
+     * récupère un objet Execution de la base de données suivant son identifiant
      * @param id identifiant du Execution à récupérer
      * @return objet Execution correpondant à l'identifiant id
      */

@@ -3,7 +3,6 @@ package Model;
 import Tools.Fichier;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,13 +54,15 @@ public class Methode{
     private Boolean visible = true;
     
     /**
+     * le type de la méthode(exacte ou heuristique)
+     */
+    private String type;
+    
+    /**
      * Liste des paramètres de la Méthode sous forme nom_type
      */
     @ElementCollection
     private List<String> paramsHeuristique;
-    
-    /*
-    private List<String> paramsHeuristiqueType;*/
     
     /**
      * Liste des paramètres de la Méthode
@@ -163,6 +164,22 @@ public class Methode{
     }
     
     /**
+     * Getter : retourne le type de la méthode
+     * @return type de la méthode
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Setter : modifie le type de la méthode
+     * @param type nouveau type de la méthode
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    /**
      * Vide les listes des paramètres heuristiques
      */
     public void clearListsHeuristique() {
@@ -177,13 +194,27 @@ public class Methode{
     }
     
     /**
+     * Renvoie les paramètres heuristiques sous la forme d'un HashMap
+     * @return paramètres heuristiques sous la forme d'un HashMap
+     */
+    public HashMap<String, String> getParametresHeuristique() {
+        HashMap<String, String> parametresHeuristique = new HashMap<>();
+        for (String s : paramsHeuristique) {
+            String[] split = s.split("--type--");
+            if(split.length > 1) {
+            	parametresHeuristique.put(split[0], split[1]);
+            }
+        }
+        return parametresHeuristique;
+    }
+    
+    /**
      * Getter : retourne la liste des paramètres heuristiques associés à la méthode
      * @return liste des paramètres heuristiques associés à la méthode
      */
     public List<String> getParamsHeuristique () {
         return paramsHeuristique;
     }
-    
     
     /**
      * Ajoute un paramètre heuristique à la liste sous forme nom_type
@@ -196,16 +227,6 @@ public class Methode{
     }
     
     /**
-     * Ajoute un paramètre heuristique à la liste
-     * @param nom nom du paramètre heuristique
-     * @param type type du paramètre heuristique
-     */
-    /*public void addParamHeuristiqueType(String type) {
-        if (!type.isEmpty()) 
-        	paramsHeuristiqueType.add(type);
-    }*/
-    
-    /**
      * Ajoute un paramètre heuristique à la liste sous forme nom(type)
      * @param nom nom du paramètre heuristique
      * @param type type du paramètre heuristique
@@ -213,22 +234,6 @@ public class Methode{
     public void addParamHeuris(String nom, String type) {
         if (!nom.isEmpty() && !type.isEmpty()) 
         	paramsHeuris.put(nom, type);
-    }
-    
-    /**
-     * Renvoie les paramètres heuristiques sous la forme d'un HashMap
-     * @return paramètres heuristiques sous la forme d'un HashMap
-     */
-    public HashMap<String, String> getParametresHeuristique() {
-        HashMap<String, String> parametresHeuristique = new HashMap<>();
-        for (String s : paramsHeuristique) {
-            String[] split = s.split("--type--");
-            if(split.length > 1) {
-            	//split[1].split(")");
-            	parametresHeuristique.put(split[0], split[1]);
-            }
-        }
-        return parametresHeuristique;
     }
 
     /**

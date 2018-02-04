@@ -58,6 +58,8 @@
             <c:forEach items="${paramsHeuristique.keySet()}" var="key">    		
                     <div>
                     	<br/><br/>
+                    	<%-- <input type="hidden" name="parametre" value="<c:out value="${parametre.id}"/>"/> --%>
+                    	<%-- ${parametre.id} --%>
                         <label for="nomsParamHeu[]">Nom : </label>
                         <input type="text" name="nomsParamHeu[]" id="nomsParamHeu[]" value="<c:out value="${key}"/>"/>                  
         				&nbsp<label for="typesParamHeu[]">Type : </label>

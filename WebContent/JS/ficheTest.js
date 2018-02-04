@@ -119,7 +119,7 @@ function getParams(id, nom, paramsHeuristique) {
 			const param =
 			"<div id='divParamNew2'>"+
 			    "<fieldset id='paramNecH'>"+
-			    "<legend id='divParamNew3'>Veuillez entrer les valeurs de paramètre nécessaires pour " + nom + " :</legend>" +
+			    "<legend id='divParamNew3'>Veuillez entrer les valeurs des paramètres nécessaires pour " + nom + " :</legend>" +
 			    //"<input type='button' value='Valider' onclick='upParamHeuristique()'>"+//bouton de Valider
 			    	"<c:forEach items='${params.keySet()}' var='key'>"+             
 			            "<div>"+
@@ -188,7 +188,7 @@ function getParams2(id,nom,paramsHeuristique) {
 		const param =
 		"<div id='divParamNew2'>"+
 		    "<fieldset id='paramNecH'>"+
-		    "<legend id='divParamNew3'>Veuillez entrer les valeurs de paramètre nécessaires pour " + nom + " :</legend>" +
+		    "<legend id='divParamNew3'>Veuillez entrer les valeurs des paramètres nécessaires pour " + nom + " :</legend>" +
 		    //"<input type='button' value='Valider' onclick='upParamHeuristique()'>"+//bouton de Valider
 		    	"<c:forEach items='${params.keySet()}' var='key'>"+             
 		            "<div>"+

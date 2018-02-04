@@ -27,7 +27,7 @@ public class ListeMethodeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF8");
         resp.setCharacterEncoding("UTF8");
-        //affichage de la liste des modèles
+        //affichage de la liste des méthodes
         MethodeDAO methodeDao = new MethodeDAO();
         req.setAttribute("methodes", methodeDao.getAll());
         this.getServletContext().getRequestDispatcher("/listeMethodes.jsp").forward(req, resp);

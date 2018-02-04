@@ -1,7 +1,9 @@
 package Servlets.Methode;
 
 import Dao.MethodeDAO;
+import Dao.ParametreDAO;
 import Model.Methode;
+import Model.Parametre;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -10,8 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Servlet FicheMethode gérant la création, la modification et l'affichage d'une Methode
@@ -68,19 +72,24 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF8");
         resp.setCharacterEncoding("UTF8");
-        //récupération des paramètres
+        //récupération des informations de la méthode 
         String id = req.getParameter("methode");
         String nom = req.getParameter("nom");
         String description = req.getParameter("description");
         Part part = req.getPart("file");
         String fichier = getNomFichier(part);
         InputStream file = part.getInputStream();
+        //récupération des paramètres heuristiques
         String[] NomsParamHeu = req.getParameterValues("nomsParamHeu[]");
         String[] TypesParamHeu = req.getParameterValues("typesParamHeu[]");
+        
         Methode methode;
+        Parametre parametre;
         MethodeDAO methodeDao = new MethodeDAO();
+        ParametreDAO parametreDao = new ParametreDAO();
+        
         if (!id.isEmpty()) {
-            //modification du modèle
+            //modification de la méthode
         	methode = methodeDao.get(Long.parseLong(id));
         	methode.clearListsHeuristique();
         	methode.clearListsHeuris();
@@ -89,16 +98,25 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
                 methode.addParamHeuristique(NomsParamHeu[i], TypesParamHeu[i]);
             }
             
-            /*if (TypesParamHeu != null) for (int i = 0; i < TypesParamHeu.length; i++) {
-                methode.addParamHeuristiqueType(TypesParamHeu[i]);
-            }*/
-            
             if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
                 methode.addParamHeuris(NomsParamHeu[i], TypesParamHeu[i]);
             }
             
             if (!nom.equals(methode.getNom())) methode.setNom(nom);
-            if (!description.equals(methode.getDescription())) methode.setDescription(description);
+            if (!description.equals(methode.getDescription())) methode.setDescription(description);           
+            methode.setType("heuristique");
+            //supprimer la liste selon id de méthode et puis ajouter nouveaux paramètres
+            List<Parametre> list = parametreDao.getAll();
+        	for(int k = 0; k < list.size(); k++){
+        		if(list.get(k).getMethode().getId() == methode.getId())
+                    parametreDao.remove(list.get(k));
+        	}
+            //gestion des paramètres heuristiques dans le tableau Parametre           
+            if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
+            	parametre = new Parametre(NomsParamHeu[i], methode, TypesParamHeu[i]); 
+                parametreDao.save(parametre);            
+            }
+            
             if (!fichier.isEmpty()) {
                 try {
                 	methode.setExecutable(file, fichier);
@@ -108,21 +126,22 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
             }
             methodeDao.update(methode);
         } else {
-            //création du modèle
+            //création de la méthode
         	methode = new Methode(nom, description);
         	methodeDao.save(methode);
         	//gestion des paramètres heuristiques
             if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
                 methode.addParamHeuristique(NomsParamHeu[i], TypesParamHeu[i]);
             }
-            
-            /*if (TypesParamHeu != null) for (int i = 0; i < TypesParamHeu.length; i++) {
-                methode.addParamHeuristiqueType(TypesParamHeu[i]);
-            }*/
             if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
                 methode.addParamHeuris(NomsParamHeu[i], TypesParamHeu[i]);
+            }           
+            if (NomsParamHeu != null) for (int i = 0; i < NomsParamHeu.length; i++) {
+            	parametre = new Parametre(NomsParamHeu[i], methode, TypesParamHeu[i]);
+                parametreDao.save(parametre);
             }
             
+            methode.setType("heuristique");
             if (!fichier.isEmpty()) {
                 try {
                 	methode.setExecutable(file, fichier);
@@ -132,7 +151,7 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
                 }
             }
         }
-        //réaffichage de la fiche du modèle ajouté ou modifié
+        //réaffichage de la fiche de la méthode ajoutée ou modifiée
         req.setAttribute("methode", methode);
         this.getServletContext().getRequestDispatcher("/ficheMethodeHeuristique.jsp").forward(req, resp);
     }

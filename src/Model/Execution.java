@@ -352,7 +352,7 @@ public class Execution implements Runnable {
         args[2] = String.valueOf(mode); //mode execution
         if (params.size() > 0)
             args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\param.txt"; // chemin params
-        //pour chaque modèle
+        //pour chaque méthode 
         for (Methode m : test.getMethodes()) {
             System.out.println("methode : " + m.getId());
             args[5] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\output-" + m.getId() + ".txt"; // chemin sortie --> un fichier par modèle

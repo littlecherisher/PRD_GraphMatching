@@ -34,7 +34,7 @@ public class DeleteMethodeServlet extends HttpServlet {
             methode.setVisible();
             methodeDao.update(methode);
         }
-        //on affiche la liste des modèles
+        //on affiche la liste des méthodes
         req.setAttribute("methodes", methodeDao.getAll());
         this.getServletContext().getRequestDispatcher("/listeMethodes.jsp").forward(req, resp);
     }
