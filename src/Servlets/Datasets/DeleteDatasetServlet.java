@@ -32,7 +32,7 @@ public class DeleteDatasetServlet extends HttpServlet {
             dataset.setVisible();
             datasetDAO.update(dataset);
         }
-        //on affiche la liste des modèles
+        //on affiche la liste des méthodes
         req.setAttribute("datasets", datasetDAO.getAll());
         this.getServletContext().getRequestDispatcher("/listeDatasets.jsp").forward(req, resp);
     }

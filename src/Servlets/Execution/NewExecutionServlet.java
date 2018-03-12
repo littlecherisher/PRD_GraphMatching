@@ -44,8 +44,9 @@ public class NewExecutionServlet extends HttpServlet {
         e.setDatasets(new ArrayList<>(t.getDatasets()));
         e.setSubsets(new ArrayList<>(t.getSubsets()));
         e.setParams(new ArrayList<>(t.getParams()));
+        e.setParamsH(new ArrayList<>(t.getParamsH()));
         e.setNbInstances(); //calcul du nombre d'instances
-        executionDAO.save(e);
+        executionDAO.save(e); //mettre à jour BDD
         t.fichierParam(e.getId()); //création du fichier de paramètres
         Executor.execute(e); //lancement de l'exécution
         req.setAttribute("executions", executionDAO.getAll());

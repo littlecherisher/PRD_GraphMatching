@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet ListeMethode affiche la liste des Modèles visibles par l'utilisateur
+ * Servlet ListeMethode affiche la liste des méthodes visibles par l'utilisateur
  */
 @WebServlet("/ListeMethode")
 public class ListeMethodeServlet extends HttpServlet {

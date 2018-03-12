@@ -45,13 +45,14 @@ public class FicheResultatServlet extends HttpServlet {
                 req.setAttribute("methodes",e.printMethodes());
                 req.setAttribute("datasets",e.printData());
                 req.setAttribute("parametres",e.getParametres());
+                req.setAttribute("parametresH",e.getParametresH());
                 break;
             case "appareillement" :
                 req.setAttribute("listePaires",e.getListeAppareillement());
                 req.setAttribute("methodes",e.getMethodes());
                 break;
             case "count" :
-            case"SolutionState":
+            case "SolutionState":
                 req.setAttribute("resultats",e.getCount(infos));
                 break;
             default:

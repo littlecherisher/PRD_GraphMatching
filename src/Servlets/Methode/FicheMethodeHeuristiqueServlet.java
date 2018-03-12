@@ -2,6 +2,9 @@ package Servlets.Methode;
 
 import Dao.MethodeDAO;
 import Dao.ParametreDAO;
+import Dao.TestDAO;
+import Dao.TestMethodeDAO;
+import Dao.TestMethodeParametreDAO;
 import Model.Methode;
 import Model.Parametre;
 
@@ -23,6 +26,8 @@ import java.util.List;
 @WebServlet("/FicheMethodeHeuristique")
 @MultipartConfig
 public class FicheMethodeHeuristiqueServlet extends HttpServlet {
+	
+    TestMethodeDAO testMethodeDao = new TestMethodeDAO();
 
     /**
      * Retourne le nom du fichier uploadé par l'utilisateur
@@ -58,6 +63,7 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
                 req.setAttribute("methode", methode);
             }
         }
+        req.setAttribute("testmethodes", testMethodeDao.getAll()); //affichage de la liste des testmethodes
         this.getServletContext().getRequestDispatcher("/ficheMethodeHeuristique.jsp").forward(req, resp);
     }
 
@@ -153,6 +159,7 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
         }
         //réaffichage de la fiche de la méthode ajoutée ou modifiée
         req.setAttribute("methode", methode);
+        req.setAttribute("testmethodes", testMethodeDao.getAll()); //affichage de la liste des testmethodes
         this.getServletContext().getRequestDispatcher("/ficheMethodeHeuristique.jsp").forward(req, resp);
     }
 }

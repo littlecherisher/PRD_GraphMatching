@@ -32,6 +32,7 @@
         <tr>
             <th>Nom</th>
             <th>Description</th>
+            <th>Type</th>
             <th>Chemin exécutable</th>
         </tr>
         </thead>
@@ -41,6 +42,7 @@
                 <c:out value="${methode.id}"/> ondblclick='modif(<c:out value="${methode.id}"/>,"<c:out value="${methode.paramsHeuristique}"/>")'>
             <td><c:out value="${methode.nom}"/></td>
             <td><c:out value="${methode.description}"/></td>
+            <td><c:out value="${methode.type}"/></td>
             <td><c:out value="${methode.executable}"/></td>
         </tr>
         </c:forEach>

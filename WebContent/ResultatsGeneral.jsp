@@ -19,6 +19,9 @@
         <c:forEach items="${parametres.keySet()}" var="key">
             <li><c:out value="${key}"/> : <c:out value="${parametres[key]}"/> </li>
         </c:forEach>
+        <c:forEach items="${parametresH.keySet()}" var="key">
+            <li><c:out value="${key}"/> : <c:out value="${parametresH[key]}"/> </li>
+        </c:forEach>
         </ul>
     </li>
 </ul>

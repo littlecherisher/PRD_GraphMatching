@@ -1,8 +1,12 @@
 package Model;
 
 import Dao.DatasetDAO;
+import Dao.ParametreDAO;
 import Dao.SubsetDAO;
 import Dao.TestDAO;
+import Dao.TestMethodeDAO;
+import Dao.TestMethodeParametreDAO;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -216,6 +220,14 @@ public class Test {
     public List<String> getParams() {
         return params;
     }
+    
+    /**
+     * Getter : retourne la liste des paramètres heuristiques associés au Test
+     * @return liste des paramètres heuristiques associés au Test
+     */
+    public List<String> getParamsH() {
+        return paramsH;
+    }
 
     /**
      * Ajoute un objet Methode à la liste
@@ -321,19 +333,30 @@ public class Test {
      * @param id identifiant de l'Execution
      */
     public void fichierParam(long id){
-        Path path = Paths.get("ProjetPRD\\Executions",String.valueOf(id));
         try {
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
+        	Path path1 = Paths.get("ProjetPRD\\Executions",String.valueOf(id));
+            if (!Files.exists(path1)) {
+                Files.createDirectories(path1);
             }
             if(params.size() > 0) {
-                path = Paths.get(path.toString(), "param.txt");
-                Files.write(path, params, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
+                path1 = Paths.get(path1.toString(), "param.txt");
+                Files.write(path1, params, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
             }
-            /*if(paramsHeu.size() > 0) {
-                path = Paths.get(path.toString(), "paramHeu.txt");
-                Files.write(path, paramsHeu, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
+            /*Path path3 = Paths.get("ProjetPRD\\Executions",String.valueOf(id));
+            if(paramsH.size() > 0) {
+                path3 = Paths.get(path3.toString(), "paramH.txt");
+                Files.write(path3, paramsH, Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
             }*/
+            for(Methode m : methodes){
+            	Path path2 = Paths.get("ProjetPRD\\Executions",String.valueOf(id));
+                if (!Files.exists(path2)) {
+                    Files.createDirectories(path2);
+                }
+                if(m.getParamsHeuristique().size() > 0) {
+                    path2 = Paths.get(path2.toString(), "paramHeuristique-" + m.getId() + ".txt");
+                    Files.write(path2, getEachParams(m.getId()), Charset.forName("UTF-8"), CREATE, TRUNCATE_EXISTING);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -394,4 +417,34 @@ public class Test {
         TestDAO testDAO = new TestDAO();
         return testDAO.getNbExecutions(id);
     }
+    
+    /**
+     * Retourne la liste des paramètres heuristiques sous forme nom = valeur pour chaque méthode 
+     * quand on va exécute un test qui contient deux méthodes heuristiques
+     * @param id identifiant de la méthode heuristique 
+     * @return la liste des paramètres heuristiques sous forme nom = valeur
+     */
+	public ArrayList<String> getEachParams(long id) {		
+		ParametreDAO parametreDAO = new ParametreDAO();
+		TestMethodeDAO testMethodeDAO = new TestMethodeDAO();
+		TestMethodeParametreDAO testMethodeParametreDAO = new TestMethodeParametreDAO();
+		ArrayList<String> ParamsNomValeur = new ArrayList<String>();
+		List<Parametre> params = parametreDAO.getAll();
+		List<TestMethode> testMethodes = testMethodeDAO.getAll();
+		List<TestMethodeParametre> testMethodeParametres = testMethodeParametreDAO.getAll();
+		for (int i = 0; i < params.size(); i++) {
+			if (params.get(i).getMethode().getId() == id)
+				for(int k = 0; k < testMethodes.size(); k++){
+					if(testMethodes.get(k).getMethode().getId() == id && testMethodes.get(k).getTest().id == getId())
+						for (int j = 0; j < testMethodeParametres.size(); j++) {
+							if (testMethodeParametres.get(j).getParametre().getId() == params.get(i).getId() 
+									&& testMethodeParametres.get(j).getTestMethode().getId() == testMethodes.get(k).getId()) {
+								ParamsNomValeur.add(params.get(i).getNom() + " = " + testMethodeParametres.get(j).getValeur());
+						}
+					}
+				}
+				
+		}
+		return ParamsNomValeur;
+	}
 }

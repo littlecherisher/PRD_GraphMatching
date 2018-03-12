@@ -22,6 +22,8 @@
 <jsp:include page="index.jsp"/>
 <script type="text/javascript">
 	var countFlag = 0;
+	var countParamFlag = 0;
+	var selectFlag = 0;
 </script>
 <br/><br/>
 <c:choose>
@@ -40,6 +42,7 @@
 					<tr>
 						<th></th>
 						<th>Méthodes</th>
+						<th>Types</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -49,9 +52,10 @@
                 				<c:out value="class=memo "/>
                 			</c:if>
 							id=<c:out value="${methode.id}"/> />
-						<td id=<c:out value="${methode.id}"/>
-							onclick='getParams(<c:out value="${methode.id}"/>,"<c:out value="${methode.nom}"/>","<c:out value="${methode.paramsHeuristique}"/>")' />
+						<td id=<c:out value="#td:${methode.id}"/>
+							onclick='selectFlag = getParams("<c:out value="${methode.id}"/>","<c:out value="${methode.nom}"/>","<c:out value="${methode.paramsHeuristique}"/>",selectFlag,countFlag)' />
 						<td><c:out value="${methode.nom}" /></td>
+						<td><c:out value="${methode.type}" /></td>
 						 <input id="iMethodeNom" name="iMethodeNom" value="${methode.nom}" style="border:0px;" readonly="readonly"/>
 						 <input id="iMethodeParamsHeuristique" name="iMethodeParamsHeuristique" value="${methode.paramsHeuristique}" style="border:0px;" readonly="readonly"/>
 						 <script type="text/javascript">
@@ -83,15 +87,6 @@
             </thead>
             <tbody>
             <c:forEach items="${datasets}" var="dataset">
-                <tr
-                        <c:if test="${test.datasets.contains(dataset)}">
-                            <c:out value="class=memo "/>
-                        </c:if>
-                        id=<c:out value="${dataset.id}"/>>
-                    <td></td>
-                    <td><c:out value="${dataset.nom}"/></td>
-                    <td></td>
-                </tr>
                 <c:forEach items="${dataset.getSubsets()}" var="subset">
                     <tr
                             <c:if test="${test.subsets.contains(subset)}">
@@ -99,7 +94,7 @@
                             </c:if>
                             id=<c:out value="${dataset.id}-${subset.id}"/>>
                         <td></td>
-                        <td></td>
+                        <td><c:out value="${dataset.nom}"/></td>
                         <td><c:out value="${subset.nom}"/></td>
                     </tr>
                 </c:forEach>
@@ -181,7 +176,26 @@
         </fieldset>
     </div>
     <br/><br/>
-    
+    <div id="gettestmethodeparametres">
+  		<c:forEach items="${testmethodeparametres}" var="testmethodeparametre">
+  			<c:set var="testmethodeparametre1" value="${testmethodeparametre.testMethode.test.id}"/>
+  			<c:set var="testmethodeparametre2" value="${test.id}"/>
+			 <c:if test='${testmethodeparametre1 == testmethodeparametre2}'>
+			 <%--
+			 	<c:out value="${testmethodeparametre.parametre.methode.id}" />
+				<c:out value="${testmethodeparametre.parametre.nom}" />
+				<c:out value="${testmethodeparametre.parametre.type}" />
+				<c:out value="${testmethodeparametre.valeur}" />
+			 --%>
+			 <input id="testMethodeParametreValeur" name="testMethodeParametreValeur" value="${testmethodeparametre.valeur}" style="border:0px;" readonly="readonly"/>
+				<br /><br />
+				<script type="text/javascript">
+					document.getElementById('testMethodeParametreValeur').id = "**##" + countParamFlag;
+					countParamFlag++;
+				</script>
+			</c:if>	
+		</c:forEach>
+	</div>
     <div id="divParamNewLarge">
     	<div id="divParamNew">
     	</div>
@@ -207,6 +221,7 @@
 	var iMethodeNom = [];
 	var iMethodeParamsHeuristique = [];
 	var j = 0;
+	var Bp = 0;
 	for (var i=1;i<=countFlag;i++)
 	{	
 		var checkboxSelectNew = document.getElementById(i).className;
@@ -215,9 +230,13 @@
 					
 				iMethodeNom[j] = document.getElementById('#nom#' + i).value;
 				iMethodeParamsHeuristique[j] = document.getElementById('#params#' + i).value;
-				//alert(iMethodeNom[j]);//打开alert你会看见未消失前的输入框
+				//alert(iMethodeNom[j]);//Pour voir la zone de saisie avant sa disparition 
 				//alert(iMethodeParamsHeuristique[j]);
-				getParams2(i,iMethodeNom[j],iMethodeParamsHeuristique[j]);
+				Bp = getParams2(i,iMethodeNom[j],iMethodeParamsHeuristique[j],Bp);
+				if (iMethodeParamsHeuristique[j].length > 2 )//Comparaison de différents types de méthodes(不同类型方法比较操作)
+					selectFlag = 2;//heuristique(带参方法)
+				else
+					selectFlag = 1;//exacte(无参方法)
 				j++;
 			}
 		document.getElementById('#nom#' + i).style.display = "none";
@@ -225,6 +244,16 @@
 		document.getElementById('#nom#' + i).id = "delete2";
 		document.getElementById('#params#' + i).id = "delete3";
 	}
+	//alert(countParamFlag);
+	var testMethodeParametreValeur = [];
+	for (i=0;i<countParamFlag;i++)
+		{
+			testMethodeParametreValeur[i] = document.getElementById('**##' + i).value;
+			//alert(testMethodeParametreValeur[i]);//Pour voir le processus de mettre en chiffres(打开alert可以看见数字被置入的全过程)
+			document.getElementById('##**' + i).value = testMethodeParametreValeur[i];
+		}
+	document.getElementById('gettestmethodeparametres').style.display = "none";
+	document.getElementById('gettestmethodeparametres').id = "delete4";
 </script>
 </body>
 </html>

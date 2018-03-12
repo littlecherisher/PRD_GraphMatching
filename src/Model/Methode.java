@@ -2,6 +2,11 @@ package Model;
 
 import Tools.Fichier;
 import org.hibernate.annotations.GenericGenerator;
+import org.omg.PortableServer.THREAD_POLICY_ID;
+
+import Dao.ParametreDAO;
+import Dao.TestMethodeDAO;
+import Dao.TestMethodeParametreDAO;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -72,6 +77,7 @@ public class Methode{
 
     /**
      * Constructeur par défaut de la classe Methode
+     * @param id identifiant de la Methode
      */
     public Methode() {
     }
@@ -200,7 +206,7 @@ public class Methode{
     public HashMap<String, String> getParametresHeuristique() {
         HashMap<String, String> parametresHeuristique = new HashMap<>();
         for (String s : paramsHeuristique) {
-            String[] split = s.split("--type--");
+            String[] split = s.split("----");
             if(split.length > 1) {
             	parametresHeuristique.put(split[0], split[1]);
             }
@@ -223,7 +229,7 @@ public class Methode{
      */
     public void addParamHeuristique(String nom, String type) {
         if (!nom.isEmpty() && !type.isEmpty()) 
-        	paramsHeuristique.add(nom + "--type--" + type);
+        	paramsHeuristique.add(nom + "----" + type);
     }
     
     /**
@@ -251,9 +257,11 @@ public class Methode{
         Fichier.copie(executable, destination, name);
         try {
             //copie de la dll cplex1260.dll dans le répertoire si elle n'est pas présente
-        	if(!new File(destination.toString()+"\\cplex1270.dll").exists())
-                //System.out.println(Paths.get(destination.toString()+"\\..\\..\\lib","cplex1270.dll"));
-                Files.copy(Paths.get(destination.toString()+"\\..\\..\\lib","cplex1270.dll"),Paths.get(destination.toString(),"cplex1270.dll"));
+        	if(!new File(destination.toString()+"\\cplex1260.dll").exists())
+        		//Implémentation locale
+                Files.copy(Paths.get(destination.toString()+"\\..\\..\\lib","cplex1260.dll"),Paths.get(destination.toString(),"cplex1260.dll"));
+        		//Implémentation sur serveur
+        		//Files.copy(Paths.get("cplex1260.dll"),Paths.get(destination.toString(),"cplex1260.dll"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -269,5 +277,25 @@ public class Methode{
     @Override
     public boolean equals(Object obj) {
         return (id == ((Methode)obj).getId());
+    }
+    
+    /**
+     * Vérifier que cette méthode heuristique est déjà ajoutée dans un test 
+     * @return vrai si la méthode heuristique est déjà ajoutée dans un test, sinon faux
+     */
+    public boolean dejaTest() {
+		TestMethodeDAO testMethodeDAO = new TestMethodeDAO();
+		List<TestMethode> testMethodes = testMethodeDAO.getAll();
+		int j = 0;
+		for (int i = 0; i < testMethodes.size(); i++) {
+			if (testMethodes.get(i).getMethode().getId() == id){
+				j++;
+			}
+		}
+		if(j == 0){
+			return false;
+		}else {
+			return true;
+		}
     }
 }

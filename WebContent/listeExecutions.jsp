@@ -51,6 +51,7 @@
             <th>Test</th>
             <th>Nb instances</th>
             <th>Etat</th>
+            <!-- <th>Etat</th> -->
         </tr>
         </thead>
         <tbody>
@@ -61,6 +62,7 @@
             <td><c:out value="${execution.test.nom}"/></td>
             <td><c:out value="${execution.getNbInstancesExec()}/${execution.nbInstances}"/></td>
             <td><c:out value="${execution.etat}"/></td>
+            <%-- <td><c:out value="${execution.getGraphesData()}"/></td> --%>
         </tr>
         </c:forEach>
         <tbody>

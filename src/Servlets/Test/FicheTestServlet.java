@@ -49,8 +49,11 @@ public class FicheTestServlet extends HttpServlet {
                 req.setAttribute("test", test);
             }
         }
-        req.setAttribute("methodes", methodeDAO.getAll()); //affichage de la liste des modèles
-        req.setAttribute("datasets", datasetDAO.getAll()); //affichage de la liste des datasets
+        req.setAttribute("methodes", methodeDAO.getAll()); //affichage de la liste des méthodes
+        req.setAttribute("datasets", datasetDAO.getAll()); //affichage de la liste des datasets        
+        req.setAttribute("testmethodeparametres", testmethodeparametreDAO.getAll()); //affichage de la liste des testmethodeparametres
+        req.setAttribute("testmethodes", testmethodeDAO.getAll()); //affichage de la liste des testmethodes
+        req.setAttribute("parametres", parametreDAO.getAll()); //affichage de la liste des parametres
         this.getServletContext().getRequestDispatcher("/ficheTest.jsp").forward(req, resp);
     }
 
@@ -103,14 +106,25 @@ public class FicheTestServlet extends HttpServlet {
             if (NomsParam != null) for (int i = 0; i < NomsParam.length; i++) {
                 test.addParam(NomsParam[i], ValeursParam[i]);
             }  
-           
+   
+            if (NomsParamHeu != null){
+            	String[] NomsValeursParamHeu = NomsParamHeu.clone();
+            	for (int j = 0; j < NomsParamHeu.length; j++) {
+                	test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
+                	StringBuilder sb = new StringBuilder(NomsParamHeu[j]);
+                	sb.insert(NomsParamHeu[j].length(), " = ");
+                	NomsValeursParamHeu[j] = sb + ValeursParamHeu[j];
+                	test.addParamHeuris(NomsValeursParamHeu[j], TypesParamHeu[j]);
+                }
+            }
+
             if (memoire != "") test.addParam("memoire", memoire);
             if (temps != "") test.addParam("temps", temps);
             if (tempsHeur != "") test.addParam("tempsHeur", tempsHeur);
             if (tolerence != "") test.addParam("tolerence", tolerence);
             if (thread != "") test.addParam("thread", thread);
             
-            //gestion des modèles
+            //gestion des méthodes
             for (String m : methodes) {
                 test.addMethode(methodeDAO.get(Long.parseLong(m)));
             }
@@ -146,18 +160,11 @@ public class FicheTestServlet extends HttpServlet {
 									testMethodeParametre = new TestMethodeParametre(testMethode, listP.get(k),
 											ValeursParamHeu[j]);
 									testmethodeparametreDAO.save(testMethodeParametre);
+									break;
 								}
 							}
 					}
 				}
-            }
-                       
-            if (NomsParamHeu != null) for (int j = 0; j < NomsParamHeu.length; j++) {
-            	test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
-            	StringBuilder sb = new StringBuilder(NomsParamHeu[j]);
-            	sb.insert(NomsParamHeu[j].length(), " = ");
-            	NomsParamHeu[j] = sb + ValeursParamHeu[j];
-            	test.addParamHeuris(NomsParamHeu[j], TypesParamHeu[j]);
             }
         } else {
             //création du test
@@ -167,12 +174,22 @@ public class FicheTestServlet extends HttpServlet {
                 test.addParam(NomsParam[i], ValeursParam[i]);
             }
             
+            if (NomsParamHeu != null){
+            	String[] NomsValeursParamHeu = NomsParamHeu.clone();
+            	for (int j = 0; j < NomsParamHeu.length; j++) {
+            		test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
+                	StringBuilder sb = new StringBuilder(NomsParamHeu[j]);
+                	sb.insert(NomsParamHeu[j].length(), " = ");
+                	NomsValeursParamHeu[j] = sb + ValeursParamHeu[j];
+                	test.addParamHeuris(NomsValeursParamHeu[j], TypesParamHeu[j]);
+                }
+            }
             if (memoire != "") test.addParam("memoire", memoire);
             if (temps != "") test.addParam("temps", temps);
             if (tempsHeur != "") test.addParam("tempsHeur", tempsHeur);
             if (tolerence != "") test.addParam("tolerence", tolerence);
             if (thread != "") test.addParam("thread", thread);
-            //gestion des modèles
+            //gestion des méthodes
             for (String m : methodes) {
                 test.addMethode(methodeDAO.get(Long.parseLong(m)));
             }
@@ -195,24 +212,20 @@ public class FicheTestServlet extends HttpServlet {
 									testMethodeParametre = new TestMethodeParametre(testMethode, listP.get(k),
 											ValeursParamHeu[j]);
 									testmethodeparametreDAO.save(testMethodeParametre);
+									break;
 								}
 							}
 					}
 				}
-			}
-			if (NomsParamHeu != null) for (int j = 0; j < NomsParamHeu.length; j++) {
-            	test.addParamHeu(NomsParamHeu[j], ValeursParamHeu[j]);
-            	StringBuilder sb = new StringBuilder(NomsParamHeu[j]);
-            	sb.insert(NomsParamHeu[j].length(), " = ");
-            	NomsParamHeu[j] = sb + ValeursParamHeu[j];
-            	test.addParamHeuris(NomsParamHeu[j], TypesParamHeu[j]);
-            }
-            
+			}  
         }
         //réaffichage de la fiche du test ajouté ou modifié
         req.setAttribute("test", test);
-        req.setAttribute("methodes", methodeDAO.getAll()); //affichage de la liste des modèles
+        req.setAttribute("methodes", methodeDAO.getAll()); //affichage de la liste des méthodes
         req.setAttribute("datasets", datasetDAO.getAll()); //affichage de la liste des datasets
+        req.setAttribute("testmethodeparametres", testmethodeparametreDAO.getAll()); //affichage de la liste des testmethodeparametres
+        req.setAttribute("testmethodes", testmethodeDAO.getAll()); //affichage de la liste des testmethodes
+        req.setAttribute("parametres", parametreDAO.getAll()); //affichage de la liste des parametres
         this.getServletContext().getRequestDispatcher("/ficheTest.jsp").forward(req, resp);
     }
 }

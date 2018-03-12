@@ -2,7 +2,10 @@ package Model;
 
 import Dao.DatasetDAO;
 import Dao.ExecutionDAO;
+import Dao.ParametreDAO;
 import Dao.SubsetDAO;
+import Dao.TestMethodeDAO;
+import Dao.TestMethodeParametreDAO;
 import Tools.Fichier;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -46,7 +49,7 @@ public class Execution implements Runnable {
     private String etat;
     /**
      * nombre d'instance de l'execution
-     * Une instance correspond à execution d'un modèle sur une paire de graphes
+     * Une instance correspond à execution d'une méthode sur une paire de graphes
      */
     private int nbInstances;
     /**
@@ -81,7 +84,12 @@ public class Execution implements Runnable {
      * Liste des paramètres associés à l'Execution
      */
     @ElementCollection
-    private List<String> params;
+    private List<String> params;   
+    /**
+     * Liste des paramètres associés à l'Execution sous forme nom=valeur (Pour les méthodes heuristiques)
+     */
+    @ElementCollection
+    private List<String> paramsH;
 
     /**
      * Constructeur de la classe Execution
@@ -231,6 +239,22 @@ public class Execution implements Runnable {
     public void setParams(List<String> params) {
         this.params = params;
     }
+    
+    /**
+     * Getter : retourne la liste des paramètres heuristiques associés à l'Execution
+     * @return liste des paramètres heuristiques associés à l'Execution
+     */
+    public List<String> getParamsH() {
+        return paramsH;
+    }
+
+    /**
+     * Setter : modifie la liste des paramètres heuristiques associés à l'Execution
+     * @param params nouvelle liste des paramètres heuristiques associés à l'Execution
+     */
+    public void setParamsH(List<String> paramsH) {
+        this.paramsH = paramsH;
+    }
 
     /**
      * Getter : retourne le nombre d'instances de l'Execution
@@ -348,30 +372,68 @@ public class Execution implements Runnable {
         etat = "En cours";
         executionDAO.update(this);
         Runtime runtime = Runtime.getRuntime();
-        String[] args = new String[7];
-        args[2] = String.valueOf(mode); //mode execution
-        if (params.size() > 0)
-            args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\param.txt"; // chemin params
-        //pour chaque méthode 
-        for (Methode m : test.getMethodes()) {
-            System.out.println("methode : " + m.getId());
-            args[5] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\output-" + m.getId() + ".txt"; // chemin sortie --> un fichier par modèle
-            args[0] = m.getExecutable();
-            if(!aExecuter) aExecuter = !Files.exists(Paths.get(args[5]));
-            for (Dataset d : datasets) {
-                args[1] = String.valueOf(d.getId());
-                //si le fichier résultat existe on cherche le dataset dedans
-                if(!aExecuter) aExecuter = !Fichier.FichierContient(args[5],args[1]);
-                lancerExecution(Fichier.listeFichiers(d.getDataset()), runtime, args, aExecuter);
-                aExecuter = false;
-            }
-            for (Subset s : subsets) {
-                args[1] = s.getId() + "-" + s.getDataset().getId();
-                //si le fichier résultat existe on cherche le subset dedans
-                if(!aExecuter) aExecuter = !Fichier.FichierContient(args[5],args[1]);
-                lancerExecution(Fichier.lectureSubset(s.getChemin()), runtime, args, aExecuter);
-                aExecuter = false;
-            }
+        for(int i = 0; i < test.getMethodes().size(); i ++){
+        	if(test.getMethodes().get(i).getType().equals("exacte")){
+                String[] args = new String[7];
+                args[2] = String.valueOf(mode); //mode d'execution
+                //obtenir les parametres exactes dans param.txt
+                if (params.size() > 0)
+                    args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\param.txt"; // chemin params exacte
+                //obtenir les parametres heuristiques dans paramH.txt
+                /*if (paramsH.size() > 0)
+                    args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\paramH.txt"; // chemin params heuristique*/        
+                //obtenir les parametres heuristiques pour chaque méthode heuristique dans paramHeuristique-x.txt
+                /*for(Methode m : methodes){
+                	if (m.getParamsHeuristique().size() > 0)
+                        args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\paramHeuristique-" + m.getId() + ".txt"; // chemin params heuristique
+                }*/
+                //pour chaque méthode 
+                for (Methode m : test.getMethodes()) {
+                    System.out.println("methode : " + m.getId());
+                    args[5] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\output-" + m.getId() + ".txt"; // chemin sortie --> un fichier par méthode
+                    args[0] = m.getExecutable();
+                    if(!aExecuter) aExecuter = !Files.exists(Paths.get(args[5]));
+                    for (Dataset d : datasets) {
+                        args[1] = String.valueOf(d.getId());
+                        //si le fichier résultat existe on cherche le dataset dedans
+                        if(!aExecuter) aExecuter = !Fichier.FichierContient(args[5],args[1]);
+                        lancerExecutionExacte(Fichier.listeFichiers(d.getDataset()), runtime, args, aExecuter);
+                        aExecuter = false;
+                    }
+                    for (Subset s : subsets) {
+                        args[1] = s.getId() + "-" + s.getDataset().getId();
+                        //si le fichier résultat existe on cherche le subset dedans
+                        if(!aExecuter) aExecuter = !Fichier.FichierContient(args[5],args[1]);
+                        lancerExecutionExacte(Fichier.lectureSubset(s.getChemin()), runtime, args, aExecuter);
+                        aExecuter = false;
+                    }
+                }
+        	}else if(test.getMethodes().get(i).getType().equals("heuristique")){
+        		for (Methode m : test.getMethodes()) {
+        			System.out.println("methode : " + m.getId());
+        			int nbParams = m.getParamsHeuristique().size();
+            		String[] args = new String[5+nbParams];
+            		args[0] = m.getExecutable();
+            		args[4] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\output-" + m.getId() + ".txt"; // chemin sortie --> un fichier par méthode
+            		for (int k = 0; k < nbParams; k++){
+            			args[5+k] = String.valueOf(getEachParamsValeurs(m.getId()).get(k));
+            		}
+            		for (Dataset d : datasets) {
+                        args[1] = String.valueOf(d.getId());
+                        //si le fichier résultat existe on cherche le dataset dedans
+                        if(!aExecuter) aExecuter = !Fichier.FichierContient(args[4],args[1]);
+                        lancerExecutionHeuristique(Fichier.listeFichiers(d.getDataset()), runtime, args, aExecuter);
+                        aExecuter = false;
+                    }
+                    for (Subset s : subsets) {
+                        args[1] = s.getId() + "-" + s.getDataset().getId();
+                        //si le fichier résultat existe on cherche le subset dedans
+                        if(!aExecuter) aExecuter = !Fichier.FichierContient(args[4],args[1]);
+                        lancerExecutionHeuristique(Fichier.lectureSubset(s.getChemin()), runtime, args, aExecuter);
+                        aExecuter = false;
+                    }
+        		}
+        	}
         }
         etat = "Terminé";
         executionDAO.update(this);
@@ -379,19 +441,71 @@ public class Execution implements Runnable {
     }
 
     /**
-     * Appel à l'executable du modèle pour chaque paire de graphes
+     * Appel à l'executable de la méthode pour chaque paire de graphes
      * @param graphes liste des graphes
      * @param runtime objet Runtime permettant l'appel à l'exécutable
-     * @param args paramètres passés à l'exécutable
+     * @param args paramètres exactes passés à l'exécutable
      * @param aExecuter vrai si on doit executer toutes les instances, sinon faux si on doit tester l'existance de l'instance
      */
-    private void lancerExecution(List<String> graphes, Runtime runtime, String[] args, boolean aExecuter) {
+    private void lancerExecutionExacte(List<String> graphes, Runtime runtime, String[] args, boolean aExecuter) {
         for (int i = 0; i < graphes.size(); i++) {
             for (int j = 0 ; j < graphes.size(); j++) {
                 args[3] = System.getProperty("user.dir") + "\\" + graphes.get(i);
                 args[4] = System.getProperty("user.dir") + "\\" + graphes.get(j);
                 //final Process p = null;
                 if(aExecuter || aExecuter(args[5], args[1], graphes.get(i), graphes.get(j))){
+                    try {
+                        System.out.println(graphes.get(i) + " --> " + graphes.get(j));
+                        final Process p = runtime.exec(args);
+                        new Thread(() -> {
+                            try {
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                                String line = "";
+                                try {
+                                	while ((line = reader.readLine()) != null) System.out.println("sortie : " + line);
+                                } finally {
+                                    reader.close();
+                                }
+                            } catch (IOException ioe) {
+                                ioe.printStackTrace();
+                            }
+                        }).start();
+                        new Thread(() -> {
+                            try {
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                                String line = "";
+                                try {
+                                	while ((line = reader.readLine()) != null) System.err.println("erreur : " + line);
+                                } finally {
+                                    reader.close();
+                                }
+                            } catch (IOException ioe) {
+                                ioe.printStackTrace();
+                            }
+                        }).start();
+                        p.waitFor();
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Appel à l'executable de la méthode pour chaque paire de graphes
+     * @param graphes liste des graphes
+     * @param runtime objet Runtime permettant l'appel à l'exécutable
+     * @param args paramètres heuristiques passés à l'exécutable
+     * @param aExecuter vrai si on doit executer toutes les instances, sinon faux si on doit tester l'existance de l'instance
+     */
+    private void lancerExecutionHeuristique(List<String> graphes, Runtime runtime, String[] args, boolean aExecuter) {
+    	for (int i = 0; i < graphes.size(); i++) {
+            for (int j = 0 ; j < graphes.size(); j++) {
+                args[2] = System.getProperty("user.dir") + "\\" + graphes.get(i);
+                args[3] = System.getProperty("user.dir") + "\\" + graphes.get(j);
+                //final Process p = null;
+                if(aExecuter){
                     try {
                         System.out.println(graphes.get(i) + " --> " + graphes.get(j));
                         final Process p = runtime.exec(args);
@@ -434,7 +548,7 @@ public class Execution implements Runnable {
      * Lecture des fichiers de sortie pour extraire les minimums, moyennes et maximums correspondant au critère info
      * appel à la méthode calculDeviation si info = deviation
      * @param info nom du critère à récupérer
-     * @return structure contenant les min, sum, max et count du critère info par dataset ou subset et par modèle
+     * @return structure contenant les min, sum, max et count du critère info par dataset ou subset et par méthode
      */
     public HashMap<String, HashMap<String, List<Double>>> getResultats(String info) {
         final int MIN = 0;
@@ -443,8 +557,12 @@ public class Execution implements Runnable {
         final int NB = 3;
         //Initialisation
         HashMap<String, HashMap<String, List<Double>>> result = initHashMap(!info.equals("ObjVal"));
+        
+        //HashMap<String, List<Double>> resultSol = new HashMap<>();
+        
         BufferedReader in;
         Double BestOpt = Double.MAX_VALUE;
+        //List<Double> BestOptList = new ArrayList<>();
         String dataname;
         for (Methode m : methodes) {
             String line;
@@ -453,6 +571,9 @@ public class Execution implements Runnable {
                 in = new BufferedReader(new FileReader(file));
                 HashMap<String, List<Double>> resultSub = new HashMap<>();
                 List<Double> resultMethode = new ArrayList<>(4);
+                
+                //List<Double> solution = new ArrayList<>();
+                
                 while ((line = in.readLine()) != null) {
                     double UB = 0, LB;
                     dataname = "";
@@ -498,6 +619,9 @@ public class Execution implements Runnable {
                                         Double valeur = Double.valueOf(val);
                                         //if (valeur < BestOpt) BestOpt = valeur;
                                         if (valeur < BestOpt && valeur != 0) BestOpt = valeur;
+                                        //solution.clear();
+                                        //solution.add(valeur);
+                                    	//resultSol.put(String.valueOf(m.getId()), solution);
                                         resultMethode.add(valeur);
                                     }
                                     break;
@@ -521,7 +645,7 @@ public class Execution implements Runnable {
                             }
                         }
                     }
-                }
+                }              
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -535,8 +659,8 @@ public class Execution implements Runnable {
     /**
      * Formate le résultat de la méthode getResultats pour calculer la déviation de la fonction objectif
      * @param min plus petite valeur de la fonction objectif
-     * @param data structure contenant les min, sum, max et count des fonctions objectif par dataset ou subset et par modèle
-     * @return structure contenant les min, sum, max et count de la déviation de la fonction objectif par dataset ou subset et par modèle
+     * @param data structure contenant les min, sum, max et count des fonctions objectif par dataset ou subset et par méthode
+     * @return structure contenant les min, sum, max et count de la déviation de la fonction objectif par dataset ou subset et par méthode
      */
     private HashMap<String, HashMap<String, List<Double>>> calculDeviation(double min, HashMap<String, HashMap<String, List<Double>>> data) {
         final int MIN = 0;
@@ -547,7 +671,7 @@ public class Execution implements Runnable {
         for (Map.Entry<String, HashMap<String, List<Double>>> entry : data.entrySet()) {
             for (Map.Entry<String, List<Double>> entryMethode : entry.getValue().entrySet()) {
                 for (double d : entryMethode.getValue()) {
-                	double dev = Math.abs(min - d / min);
+                	double dev = Math.abs((min - d) / min);
                     List<Double> retour = result.get(entry.getKey()).get(entryMethode.getKey());
                     if (dev < retour.get(MIN)) {
                         retour.set(MIN, dev);
@@ -567,7 +691,7 @@ public class Execution implements Runnable {
     /**
      * Lecture des fichiers de sortie pour extraire le nombre de linges correspondantes au critère info
      * @param info nom du critère à récupérer
-     * @return structure contenant le nombre de lignes correspondantes au critère par dataset ou subset et par modèle
+     * @return structure contenant le nombre de lignes correspondantes au critère par dataset ou subset et par méthode
      */
     public HashMap<String, HashMap<String, Double>> getCount(String info) {
         //Initialisation
@@ -601,7 +725,6 @@ public class Execution implements Runnable {
                                         i = split.length; //sortie de la boucle
                                     }
                                 }
-
                                 break;
                             default: //instances traitées
                                 if (info.equals("count")) {
@@ -621,7 +744,7 @@ public class Execution implements Runnable {
     }
 
     /**
-     * Lecture des fichier de sortie pour extraire les paires de graphes sur les quelles on a exécuté les Methode
+     * Lecture des fichier de sortie pour extraire les paires de graphes sur les quelles on a exécuté les Methodes
      * @return liste des paires de graphes sur les quelles on a exécuté les Methode
      */
     public List<List<String>> getListeAppareillement() {
@@ -639,9 +762,9 @@ public class Execution implements Runnable {
                         String[] subSplit = split[i].split(":");
                         String nom = subSplit[0];
                         String val = subSplit[1];
-                        if (nom.equals("G1Name")) {
+                        if (nom.equals("G1ID")) {
                             if (!G1.contains(val)) G1.add(val);
-                        } else if (nom.equals("G2Name")) {
+                        } else if (nom.equals("G2ID")) {
                             if (!G2.contains(val)) G2.add(val);
                             i = split.length; //sortie de la boucle
                         }
@@ -678,8 +801,14 @@ public class Execution implements Runnable {
                 String[] split = line.split(";");
                 for (int i = 0; i < split.length; i++) {
                     String[] subSplit = split[i].split(":");
-                    String nom = subSplit[0];
-                    String val = subSplit[1];
+                    String nom, val;
+					if (subSplit.length > 1) {
+						nom = subSplit[0];
+						val = subSplit[1];
+					} else {
+						nom = subSplit[0];
+						val = null;
+					}
                     switch (nom) {
                         case "Dataset":
                             if(lastDataset != "" && !lastDataset.equals(val)){
@@ -689,12 +818,12 @@ public class Execution implements Runnable {
                             }
                             lastDataset = val;
                         break;
-                        case "G1Name":
+                        case "G1ID":
                             if (!val.equals(g1)) {
                                 i = split.length; //sortie de la boucle
                             }
                         break;
-                        case "G2Name":
+                        case "G2ID":
                             if (!val.equals(g2)) {
                                 i = split.length; //sortie de la boucle
                             }
@@ -861,6 +990,19 @@ public class Execution implements Runnable {
         }
         return parametres;
     }
+    
+    /**
+     * Retourne la liste des paramètres heuristiques associés à l'Execution sous forme de HashMap
+     * @return HashMap contenant les paramètres heuristiques associés à l'Execution
+     */
+    public HashMap<String, String> getParametresH() {
+        HashMap<String, String> parametresH = new HashMap<>();
+        for (String s : paramsH) {
+            String[] split = s.split(" = ");
+            if(split.length > 1) parametresH.put(split[0], split[1]);
+        }
+        return parametresH;
+    }
 
 
     /**
@@ -977,6 +1119,74 @@ public class Execution implements Runnable {
             result.put(s.getId() + "-" + s.getDataset().getId(), resultSub);
         }
         return result;
+    }
+    
+    /**
+     * Retourne la liste des paramètres heuristiques sous forme nom = valeur pour chaque méthode 
+     * quand on va exécute un test qui contient deux méthodes heuristiques
+     * @param id identifiant de la méthode heuristique 
+     * @return la liste des valeurs des paramètres heuristiques
+     */
+	public ArrayList<String> getEachParamsValeurs(long id) {		
+		ParametreDAO parametreDAO = new ParametreDAO();
+		TestMethodeDAO testMethodeDAO = new TestMethodeDAO();
+		TestMethodeParametreDAO testMethodeParametreDAO = new TestMethodeParametreDAO();
+		ArrayList<String> ParamsValeur = new ArrayList<String>();
+		List<Parametre> params = parametreDAO.getAll();
+		List<TestMethode> testMethodes = testMethodeDAO.getAll();
+		List<TestMethodeParametre> testMethodeParametres = testMethodeParametreDAO.getAll();
+		for (int i = 0; i < params.size(); i++) {
+			if (params.get(i).getMethode().getId() == id)
+				for(int k = 0; k < testMethodes.size(); k++){
+					if(testMethodes.get(k).getMethode().getId() == id && testMethodes.get(k).getTest().getId() == test.getId())
+						for (int j = 0; j < testMethodeParametres.size(); j++) {
+							if (testMethodeParametres.get(j).getParametre().getId() == params.get(i).getId() 
+									&& testMethodeParametres.get(j).getTestMethode().getId() == testMethodes.get(k).getId()) {
+								ParamsValeur.add(testMethodeParametres.get(j).getValeur());
+						}
+					}
+				}
+				
+		}
+		return ParamsValeur;
+	}
+	
+	/**
+     * Lire les informations de chaque graphe
+     * @return les données de graphe avec le format de String dans Datasets ou Subsets pour une exécution
+     */
+    public String getGraphesData() {
+    	BufferedReader in = null;
+    	List<String> GrapheFileNames = new ArrayList<>();
+    	String GrapheFiles = "";
+		/*for (Dataset d : datasets) {
+			GrapheFileNames = Fichier.listeFichiers(d.getDataset());
+		}*/
+		for (Subset s : subsets) {
+			GrapheFileNames = Fichier.lectureSubset(s.getChemin());
+			for(int i = 0; i < GrapheFileNames.size(); i++){
+				String path = GrapheFileNames.get(i);
+                File f = new File(path);
+				try {
+					in = new BufferedReader(new FileReader(f));
+					String line = null;
+					try {
+						while ((line = in.readLine()) != null) {
+							GrapheFiles += line;
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				GrapheFiles += "\n";
+			}
+		}
+		//System.out.println(GrapheFiles);
+		return GrapheFiles;
     }
 
 }

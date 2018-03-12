@@ -13,7 +13,7 @@
             data.addColumn('number', 'Moyenne');
             data.addColumn('number', 'Maximum');
             <c:set var="ligne" scope="session" value="${0}"/>
-            <!-- parcours modèles -->
+            <!-- parcours méthodes -->
             <c:forEach items="${tempsCPU.value}" var="tempsCPUmethode">
                 data.addRow();
                 <c:forEach items="${execution.methodes}" var="methode">

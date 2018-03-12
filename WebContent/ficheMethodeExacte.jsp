@@ -60,6 +60,9 @@
         <form action="/GraphMatching/FicheMethodeExacte" type="GET">
             <input id="ajout" type="submit" value="+ Ajouter une méthode execte">
         </form>
+        <form action="/GraphMatching/FicheMethodeHeuristique" type="GET">
+            <input id="ajout" type="submit" value="+ Ajouter une méthode heuristique">
+        </form>
     </div>
 </form>
 </body>
