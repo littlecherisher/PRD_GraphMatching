@@ -6,7 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -54,14 +53,12 @@ public class MethodeTest {
         m.setVisible();
         m.setNom("méthode 1 update");
         m.setDescription("test update");
-        m.setExecutable(new FileInputStream("C:\\Users\\ASUS\\Desktop\\ProjetPRD\\Modeles\\1\\IPFP.exe"), "IPFP.exe");
         methodeDAO.update(m);
         Methode mTest = methodeDAO.get(id);
         assertEquals("méthode 1 update", mTest.getNom());
         assertFalse(mTest.getVisible());
         assertEquals("test update", mTest.getDescription());
         assertFalse(mTest.getVisible());
-        assertEquals(System.getProperty("user.dir") + "\\Modeles\\" + id + "\\IPFP.exe", mTest.getExecutable());
     }
 
     @Test

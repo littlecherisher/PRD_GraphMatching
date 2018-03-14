@@ -72,21 +72,21 @@
     						<%-- value="<c:out value="${paramsHeuristique.get(key)}"/>" --%>											
     						<!-- <option value="int" >int</option>
     						<option value="float" >float</option>
-    						<option value="string" >string</option> -->
+    						<option value="double" >double</option> -->
     						<c:if test='${paramsHeuristique2 == "int"}'>
                             		<option value="int" selected="selected">int</option>
     								<option value="float" >float</option>
-    								<option value="string" >string</option>
+    								<option value="double" >double</option>
                         	</c:if>
     						<c:if test='${paramsHeuristique2 == "float"}'>
                             		<option value="int">int</option>
     								<option value="float" selected="selected">float</option>
-    								<option value="string" >string</option>
+    								<option value="double" >double</option>
                         	</c:if>
-                        	<c:if test='${paramsHeuristique2 == "string"}'>
+                        	<c:if test='${paramsHeuristique2 == "double"}'>
                             		<option value="int">int</option>
     								<option value="float" >float</option>
-    								<option value="string" selected="selected">string</option>
+    								<option value="double" selected="selected">double</option>
                         	</c:if>
     					</select>
         				&nbsp&nbsp<input id="SupprimerID" class="deleteParam" type="button" value="Supprimer"/>

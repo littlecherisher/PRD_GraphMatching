@@ -220,7 +220,7 @@ public class Fichier {
     public static int nbGraphesSubset(String path) {
         int nb = 0;
         BufferedReader in = null;
-        List<String> graphes = new ArrayList<>();
+        //List<String> graphes = new ArrayList<>();
         try {
             File file = new File(path);
             in = new BufferedReader(new FileReader(file));

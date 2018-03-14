@@ -76,6 +76,14 @@ public class TestMethodeParametre {
     }
     
     /**
+     * Setter : modifie la valeur du paramètre
+     * @param valeur nouvelle valeur du paramètre
+     */
+    public void setValeur(String valeur) {
+        this.valeur = valeur;
+    }
+    
+    /**
      * Getter : retourne l'objet TestMethode associé au TestMethodeParametre
      * @return objet TestTestMethode associé au TestMethodeParametre
      */
@@ -84,10 +92,26 @@ public class TestMethodeParametre {
     }
     
     /**
+     * Setter : modifie le testMethode du TestMethodeParametre
+     * @param testMethode nouveau testMethode du TestMethodeParametre
+     */
+    public void setTestMethode(TestMethode testMethode) {
+        this.testMethode = testMethode;
+    }
+    
+    /**
      * Getter : retourne l'objet Parametre associé au TestMethodeParametre
      * @return objet Parametre associé au TestMethodeParametre
      */
     public Parametre getParametre() {
         return parametre;
+    }
+    
+    /**
+     * Setter : modifie le paramètre du TestMethodeParametre
+     * @param parametre nouveau parametre du TestMethodeParametre
+     */
+    public void setParametre(Parametre parametre) {
+        this.parametre = parametre;
     }
 }

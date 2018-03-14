@@ -2,11 +2,8 @@ package Model;
 
 import Tools.Fichier;
 import org.hibernate.annotations.GenericGenerator;
-import org.omg.PortableServer.THREAD_POLICY_ID;
 
-import Dao.ParametreDAO;
 import Dao.TestMethodeDAO;
-import Dao.TestMethodeParametreDAO;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;

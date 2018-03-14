@@ -53,8 +53,8 @@ public class DatasetTest {
         d.setVisible();
         d.setNom("dataset1 update");
         d.setDescription("test update");
-        d.setDataset(new FileInputStream("C:\\Users\\ASUS\\Desktop\\ProjetPRD\\Datasets\\1\\Dataset.zip"), "Dataset.zip");
-        d.setSubset(new FileInputStream("C:\\Users\\ASUS\\Desktop\\ProjetPRD\\Datasets\\1\\Subset.zip"), "Subset.zip");
+        d.setDataset(new FileInputStream("F:\\100ZENGKai\\PRD\\sources\\Data\\Datasets\\1\\Dataset.zip"), "Dataset.zip");
+        d.setSubset(new FileInputStream("F:\\100ZENGKai\\PRD\\sources\\Data\\Datasets\\1\\Subset.zip"), "Subset.zip");
         datasetDAO.update(d);
 
         Dataset dTest = datasetDAO.get(id);

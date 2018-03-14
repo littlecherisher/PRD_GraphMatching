@@ -68,10 +68,26 @@ public class TestMethode {
     }
     
     /**
-     * Getter : retourne l'objet Test associé au TestMethode
-     * @return objet Test associé au TestMethode
+     * Setter : modifie le test du TestMethode
+     * @param test nouveau test du TestMethode
+     */
+    public void setTest(Test test) {
+        this.test = test;
+    }
+    
+    /**
+     * Getter : retourne l'objet Methode associée au TestMethode
+     * @return objet Methode associée au TestMethode
      */
     public Methode getMethode() {
         return methode;
+    }
+    
+    /**
+     * Setter : modifie la méthode du TestMethode
+     * @param methode nouvelle methode du TestMethode
+     */
+    public void setMethode(Methode methode) {
+        this.methode = methode;
     }
 }

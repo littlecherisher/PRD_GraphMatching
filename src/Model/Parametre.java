@@ -35,7 +35,7 @@ public class Parametre {
     private Methode methode;
 
     /**
-     * Le type du paramètre (int, string ou float)
+     * Le type du paramètre (int, double ou float)
      */
     private String type;
     
@@ -90,8 +90,8 @@ public class Parametre {
     }
     
     /**
-     * Setter : modifie le nom du paramètre
-     * @param nom nouveau nom du paramètre
+     * Setter : modifie la méthode du paramètre
+     * @param methode nouvelle méthode du paramètre
      */
     public void setMethode(Methode methode) {
         this.methode = methode;

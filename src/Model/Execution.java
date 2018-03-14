@@ -441,7 +441,7 @@ public class Execution implements Runnable {
     }
 
     /**
-     * Appel à l'executable de la méthode pour chaque paire de graphes
+     * Appel à l'executable de la méthode exacte pour chaque paire de graphes
      * @param graphes liste des graphes
      * @param runtime objet Runtime permettant l'appel à l'exécutable
      * @param args paramètres exactes passés à l'exécutable
@@ -493,7 +493,7 @@ public class Execution implements Runnable {
     }
     
     /**
-     * Appel à l'executable de la méthode pour chaque paire de graphes
+     * Appel à l'executable de la méthode heuristique pour chaque paire de graphes
      * @param graphes liste des graphes
      * @param runtime objet Runtime permettant l'appel à l'exécutable
      * @param args paramètres heuristiques passés à l'exécutable
@@ -1122,7 +1122,7 @@ public class Execution implements Runnable {
     }
     
     /**
-     * Retourne la liste des paramètres heuristiques sous forme nom = valeur pour chaque méthode 
+     * Retourne la liste des valeurs des paramètres heuristiques pour chaque méthode 
      * quand on va exécute un test qui contient deux méthodes heuristiques
      * @param id identifiant de la méthode heuristique 
      * @return la liste des valeurs des paramètres heuristiques
@@ -1152,7 +1152,7 @@ public class Execution implements Runnable {
 	}
 	
 	/**
-     * Lire les informations de chaque graphe
+     * Lire les informations ligne par ligne de chaque graphe sur le fichier « .dat »
      * @return les données de graphe avec le format de String dans Datasets ou Subsets pour une exécution
      */
     public String getGraphesData() {
