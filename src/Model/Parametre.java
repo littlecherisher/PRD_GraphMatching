@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table
 public class Parametre {
 	/**
-     * Identifiant du Subset
+     * Identifiant du Parametre
      * clé primaire auto générée
      */
     @Id
@@ -28,12 +28,13 @@ public class Parametre {
      * Nom du paramètre
      */
     private String nom;
+    
     /**
      * Objet Methode au quel appartient le paramètre
      */
     @ManyToOne
     private Methode methode;
-
+    
     /**
      * Le type du paramètre (int, double ou float)
      */

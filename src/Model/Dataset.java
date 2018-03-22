@@ -1,6 +1,5 @@
 package Model;
 
-import Dao.DatasetDAO;
 import Dao.SubsetDAO;
 import Tools.Fichier;
 import org.hibernate.annotations.GenericGenerator;
@@ -248,7 +247,6 @@ public class Dataset {
      * @return chemin de destination du dossier
      */
     private String copieDossier(InputStream fichier, String name, String type) {
-        DatasetDAO datasetDAO = new DatasetDAO();
         Path destination = Paths.get("ProjetPRD\\Datasets", Long.toString(id), type);
         //on vide le répertoire de destination
         Fichier.cleanRep(destination.toString());

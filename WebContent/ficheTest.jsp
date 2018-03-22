@@ -233,10 +233,10 @@
 				//alert(iMethodeNom[j]);//Pour voir la zone de saisie avant sa disparition 
 				//alert(iMethodeParamsHeuristique[j]);
 				Bp = getParams2(i,iMethodeNom[j],iMethodeParamsHeuristique[j],Bp);
-				if (iMethodeParamsHeuristique[j].length > 2 )//Comparaison de différents types de méthodes(不同类型方法比较操作)
-					selectFlag = 2;//heuristique(带参方法)
+				if (iMethodeParamsHeuristique[j].length > 2 )//Comparaison de différents types de méthodes
+					selectFlag = 2;//heuristique
 				else
-					selectFlag = 1;//exacte(无参方法)
+					selectFlag = 1;//exacte
 				j++;
 			}
 		document.getElementById('#nom#' + i).style.display = "none";
@@ -249,7 +249,7 @@
 	for (i=0;i<countParamFlag;i++)
 		{
 			testMethodeParametreValeur[i] = document.getElementById('**##' + i).value;
-			//alert(testMethodeParametreValeur[i]);//Pour voir le processus de mettre en chiffres(打开alert可以看见数字被置入的全过程)
+			//alert(testMethodeParametreValeur[i]);//Pour voir le processus de mettre en chiffres
 			document.getElementById('##**' + i).value = testMethodeParametreValeur[i];
 		}
 	document.getElementById('gettestmethodeparametres').style.display = "none";

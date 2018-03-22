@@ -32,7 +32,8 @@ public class FicheTestServlet extends HttpServlet {
     private final ParametreDAO parametreDAO = new ParametreDAO();
     private final TestMethodeParametreDAO testmethodeparametreDAO = new TestMethodeParametreDAO();
     
-    /** Affiche la fiche du Test ou une fiche vierge pour un ajout
+    /** 
+     * Affiche la fiche du Test ou une fiche vierge pour un ajout
      * renvoie sur ficheTest.jsp
      * @param req requete contenant éventuellement l'identifiant du Test à afficher (id)
      * @param resp

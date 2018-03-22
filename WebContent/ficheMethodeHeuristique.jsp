@@ -69,10 +69,6 @@
         				&nbsp<label for="typesParamHeu[]">Type : </label>
         				<c:set var="paramsHeuristique2" value="${paramsHeuristique.get(key)}"/>
     					<select name="typesParamHeu[]" id="typesParamHeu[]" style="width:100px;font-size:15px" size="1">
-    						<%-- value="<c:out value="${paramsHeuristique.get(key)}"/>" --%>											
-    						<!-- <option value="int" >int</option>
-    						<option value="float" >float</option>
-    						<option value="double" >double</option> -->
     						<c:if test='${paramsHeuristique2 == "int"}'>
                             		<option value="int" selected="selected">int</option>
     								<option value="float" >float</option>

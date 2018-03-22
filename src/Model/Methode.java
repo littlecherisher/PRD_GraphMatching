@@ -81,7 +81,6 @@ public class Methode{
 
     /**
      * Constructeur de la classe Methode
-     *
      * @param nom nom de la méthode
      * @param description description de la méthode
      */
@@ -215,7 +214,7 @@ public class Methode{
      * Getter : retourne la liste des paramètres heuristiques associés à la méthode
      * @return liste des paramètres heuristiques associés à la méthode
      */
-    public List<String> getParamsHeuristique () {
+    public List<String> getParamsHeuristique() {
         return paramsHeuristique;
     }
     

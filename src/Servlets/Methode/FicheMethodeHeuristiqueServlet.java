@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Servlet FicheMethode gérant la création, la modification et l'affichage d'une Methode
+ * Servlet FicheMethodeHeuristique gérant la création, la modification et l'affichage d'une Methode heuristique 
  */
 @WebServlet("/FicheMethodeHeuristique")
 @MultipartConfig
@@ -46,7 +46,7 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
 
     /**
      * Affiche la fiche d'un Methode ou une fiche vide pour une création
-     * renvoie sur ficheMethode.jsp
+     * renvoie sur ficheMethodeHeuristique.jsp
      * @param req requete contenant éventuellement l'identifiant de la Methode à afficher (dataset)
      * @param resp reponse
      * @throws ServletException
@@ -63,13 +63,14 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
                 req.setAttribute("methode", methode);
             }
         }
-        req.setAttribute("testmethodes", testMethodeDao.getAll()); //affichage de la liste des testmethodes
+        //affichage de la liste des testmethodes
+        req.setAttribute("testmethodes", testMethodeDao.getAll()); 
         this.getServletContext().getRequestDispatcher("/ficheMethodeHeuristique.jsp").forward(req, resp);
     }
 
     /**
      * Créé ou modifie un objet Methode
-     * renvoie sur ficheMethode.jsp
+     * renvoie sur ficheMethodeHeuristique.jsp
      * @param req requete contenant les informations saisies dans le formulaire
      * @param resp reponse
      * @throws ServletException
@@ -159,7 +160,8 @@ public class FicheMethodeHeuristiqueServlet extends HttpServlet {
         }
         //réaffichage de la fiche de la méthode ajoutée ou modifiée
         req.setAttribute("methode", methode);
-        req.setAttribute("testmethodes", testMethodeDao.getAll()); //affichage de la liste des testmethodes
+        //affichage de la liste des testmethodes
+        req.setAttribute("testmethodes", testMethodeDao.getAll()); 
         this.getServletContext().getRequestDispatcher("/ficheMethodeHeuristique.jsp").forward(req, resp);
     }
 }

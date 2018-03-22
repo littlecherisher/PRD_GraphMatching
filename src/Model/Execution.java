@@ -9,6 +9,8 @@ import Dao.TestMethodeParametreDAO;
 import Tools.Fichier;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.sun.xml.internal.ws.policy.sourcemodel.PolicyModelUnmarshaller;
+
 import javax.persistence.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -17,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 /**
  * Classe correpondant à un objet Execution
@@ -176,7 +177,7 @@ public class Execution implements Runnable {
     }
 
     /**
-     * Getter : retourne la liste des objets Methode associés à l'Executuion
+     * Getter : retourne la liste des objets Methodes associés à l'Executuion
      * @return liste des objets Methode associés à l'Executuion
      */
     public List<Methode> getMethodes() {
@@ -282,7 +283,7 @@ public class Execution implements Runnable {
     }
 
     /**
-     * Parcours les fichiers de sortie pour déterminer le nombre d'instances (nombre de lignes) exécutées
+     * Parcours les fichiers de sortie pour déterminer le nombre d'instances exécutées
      * @return nombre d'instances exécutées
      */
     public int getNbInstancesExec() {
@@ -373,20 +374,14 @@ public class Execution implements Runnable {
         executionDAO.update(this);
         Runtime runtime = Runtime.getRuntime();
         for(int i = 0; i < test.getMethodes().size(); i ++){
+        	//pour les méthodes exactes
         	if(test.getMethodes().get(i).getType().equals("exacte")){
                 String[] args = new String[7];
-                args[2] = String.valueOf(mode); //mode d'execution
+                args[2] = String.valueOf(mode);                
                 //obtenir les parametres exactes dans param.txt
                 if (params.size() > 0)
                     args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\param.txt"; // chemin params exacte
-                //obtenir les parametres heuristiques dans paramH.txt
-                /*if (paramsH.size() > 0)
-                    args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\paramH.txt"; // chemin params heuristique*/        
-                //obtenir les parametres heuristiques pour chaque méthode heuristique dans paramHeuristique-x.txt
-                /*for(Methode m : methodes){
-                	if (m.getParamsHeuristique().size() > 0)
-                        args[6] = System.getProperty("user.dir") + "\\ProjetPRD\\Executions\\" + id + "\\paramHeuristique-" + m.getId() + ".txt"; // chemin params heuristique
-                }*/
+               
                 //pour chaque méthode 
                 for (Methode m : test.getMethodes()) {
                     System.out.println("methode : " + m.getId());
@@ -408,7 +403,7 @@ public class Execution implements Runnable {
                         aExecuter = false;
                     }
                 }
-        	}else if(test.getMethodes().get(i).getType().equals("heuristique")){
+        	}else if(test.getMethodes().get(i).getType().equals("heuristique")){//pour les méthodes heuristiques
         		for (Methode m : test.getMethodes()) {
         			System.out.println("methode : " + m.getId());
         			int nbParams = m.getParamsHeuristique().size();
@@ -450,6 +445,7 @@ public class Execution implements Runnable {
     private void lancerExecutionExacte(List<String> graphes, Runtime runtime, String[] args, boolean aExecuter) {
         for (int i = 0; i < graphes.size(); i++) {
             for (int j = 0 ; j < graphes.size(); j++) {
+            	//obtenir chaque paire de graphes
                 args[3] = System.getProperty("user.dir") + "\\" + graphes.get(i);
                 args[4] = System.getProperty("user.dir") + "\\" + graphes.get(j);
                 //final Process p = null;
@@ -502,6 +498,7 @@ public class Execution implements Runnable {
     private void lancerExecutionHeuristique(List<String> graphes, Runtime runtime, String[] args, boolean aExecuter) {
     	for (int i = 0; i < graphes.size(); i++) {
             for (int j = 0 ; j < graphes.size(); j++) {
+            	//obtenir chaque paire de graphes
                 args[2] = System.getProperty("user.dir") + "\\" + graphes.get(i);
                 args[3] = System.getProperty("user.dir") + "\\" + graphes.get(j);
                 //final Process p = null;
@@ -556,13 +553,9 @@ public class Execution implements Runnable {
         final int SUM = 2;
         final int NB = 3;
         //Initialisation
-        HashMap<String, HashMap<String, List<Double>>> result = initHashMap(!info.equals("ObjVal"));
-        
-        //HashMap<String, List<Double>> resultSol = new HashMap<>();
-        
+        HashMap<String, HashMap<String, List<Double>>> result = initHashMap(!info.equals("ObjVal"));        
         BufferedReader in;
         Double BestOpt = Double.MAX_VALUE;
-        //List<Double> BestOptList = new ArrayList<>();
         String dataname;
         for (Methode m : methodes) {
             String line;
@@ -571,13 +564,9 @@ public class Execution implements Runnable {
                 in = new BufferedReader(new FileReader(file));
                 HashMap<String, List<Double>> resultSub = new HashMap<>();
                 List<Double> resultMethode = new ArrayList<>(4);
-                
-                //List<Double> solution = new ArrayList<>();
-                
                 while ((line = in.readLine()) != null) {
                     double UB = 0, LB;
-                    dataname = "";
-                    
+                    dataname = "";                   
                     String[] split = line.split(";");
                     for (int i = 0; i < split.length; i++) {
                         String[] subSplit = split[i].split(":");
@@ -619,9 +608,6 @@ public class Execution implements Runnable {
                                         Double valeur = Double.valueOf(val);
                                         //if (valeur < BestOpt) BestOpt = valeur;
                                         if (valeur < BestOpt && valeur != 0) BestOpt = valeur;
-                                        //solution.clear();
-                                        //solution.add(valeur);
-                                    	//resultSol.put(String.valueOf(m.getId()), solution);
                                         resultMethode.add(valeur);
                                     }
                                     break;
@@ -1159,9 +1145,12 @@ public class Execution implements Runnable {
     	BufferedReader in = null;
     	List<String> GrapheFileNames = new ArrayList<>();
     	String GrapheFiles = "";
+    	
+    	//pour chaque dataset
 		/*for (Dataset d : datasets) {
 			GrapheFileNames = Fichier.listeFichiers(d.getDataset());
 		}*/
+    	//pour chaque subset
 		for (Subset s : subsets) {
 			GrapheFileNames = Fichier.lectureSubset(s.getChemin());
 			for(int i = 0; i < GrapheFileNames.size(); i++){
@@ -1185,7 +1174,6 @@ public class Execution implements Runnable {
 				GrapheFiles += "\n";
 			}
 		}
-		//System.out.println(GrapheFiles);
 		return GrapheFiles;
     }
 

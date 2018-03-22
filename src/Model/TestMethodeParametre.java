@@ -9,14 +9,14 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * Classe correpondant à un objet Test_Methode_Parametre
- * Un Test_Methode_Parametre correspond à un objet Test_Methode et un objet Parametre et une liste de "Valeur" 
+ * Classe correpondant à un objet TestMethodeParametre
+ * Un TestMethodeParametre correspond à un objet TestMethode et un objet Parametre et une liste de "Valeur" 
  */
 @Entity
 @Table
 public class TestMethodeParametre {
 	/**
-     * identifiant du Test_Methode_Parametre
+     * identifiant du TestMethodeParametre
      * clé primaire auto générée
      */
     @Id
@@ -25,13 +25,13 @@ public class TestMethodeParametre {
     private long id;
     
     /**
-     * objet Test_Methode associé au Test_Methode_Parametre
+     * objet TestMethode associé au TestMethodeParametre
      */
     @ManyToOne
     private TestMethode testMethode;
     
     /**
-     * objet Parametre associé au Test_Methode_Parametre
+     * objet Parametre associé au TestMethodeParametre
      */
     @ManyToOne
     private Parametre parametre;

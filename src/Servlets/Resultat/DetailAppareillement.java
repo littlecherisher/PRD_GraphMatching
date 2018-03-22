@@ -1,19 +1,14 @@
 package Servlets.Resultat;
 
 import Dao.ExecutionDAO;
-import Model.Dataset;
 import Model.Execution;
-import Model.Subset;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Servlet DetailAppareillement renvoie les informations sur les appareillements des noeuds et des arcs sous forme d'un tableau HTML

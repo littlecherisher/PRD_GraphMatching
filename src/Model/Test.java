@@ -39,18 +39,22 @@ public class Test {
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     private long id;
+    
     /**
      * Nom du Test
      */
     private String nom;
+    
     /**
      * Description du Test
      */
     private String description;
+    
     /**
      * Mode d'execution du Test
      */
     private int mode;
+    
     /**
      * Liste des Methode associés au Test
      */
@@ -68,6 +72,7 @@ public class Test {
      */
     @ManyToMany
     private List<Subset> subsets;
+    
     /**
      * Test visible ou non
      */

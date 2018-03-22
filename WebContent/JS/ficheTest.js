@@ -1,5 +1,5 @@
 /**
- * Created by kevmi on 26/01/2017.
+ * Created by Kai on 24/01/2018.
  */
 $(document).ready(function() {
 	const
@@ -104,9 +104,9 @@ function getParams(id, nom, paramsHeuristique, selectFlag,countFlag) {
 	var divid = "##" + id;
 	var selectFlagNew = 0;
 	var deleteFlag = 0;
-	if (checkboxSelect.indexOf("selected") > -1) //l'opération de suppression de choisir à nouveau(复选删除操作)
+	if (checkboxSelect.indexOf("selected") > -1) //l'opération de suppression de choisir à nouveau
 	{
-		if (paramsHeuristique.length > 2) //Supprimer la zone de saisie dynamique pour les heuristiques(带参方法删除动态框)
+		if (paramsHeuristique.length > 2) //Supprimer la zone de saisie dynamique pour les heuristiques
 		{
 			var mybox = document.getElementById(divid);
 			mybox.parentNode.removeChild(mybox);
@@ -115,14 +115,11 @@ function getParams(id, nom, paramsHeuristique, selectFlag,countFlag) {
 		}
 		for (var i=1;i<=countFlag;i++)
 			//SelectFlag est égal à 0 lorsque toutes les méthodes sont vérifiées de se supprimer
-			//(当所有方法全部被复选删除时，selectFlag归0)
 		{		
 				var getclassName = document.getElementById(i).className;
-				//alert(getclassName);
 				if (getclassName.indexOf("selected") < 0)
 				{
 					deleteFlag ++;
-					//alert(deleteFlag);
 				}
 				
 		}
@@ -132,16 +129,15 @@ function getParams(id, nom, paramsHeuristique, selectFlag,countFlag) {
 		}
 		return selectFlag;
 	} 
-	else //勾选操作
+	else 
 	{
-		if (paramsHeuristique.length > 2) //Comparaison de différents types de méthodes(不同类型方法比较操作)
-			selectFlagNew = 2;//heuristique(带参方法)
+		if (paramsHeuristique.length > 2) //Comparaison de différents types de méthodes
+			selectFlagNew = 2;//heuristique
 		else
-			selectFlagNew = 1;//exacte(无参方法)
-		//Déterminer si la méthode appartient au même type(判断方法是否同类型)
+			selectFlagNew = 1;//exacte
+		//Déterminer si la méthode appartient au même type
 		if (selectFlag == 0 || selectFlag == selectFlagNew) {
 			if (paramsHeuristique.length > 2) {
-				//alert(paramsHeuristiqueCut.length);
 				document.getElementById('divParamNew').style.display = "";
 				const
 				param = "<div id='divParamNew2'>"
@@ -190,16 +186,15 @@ function getParams(id, nom, paramsHeuristique, selectFlag,countFlag) {
 				//Après avoir sélectionné une méthode heuristique, si vous choisissez une méthode exacte, 
 				//la boîte de saisie des paramètres de l'heuristique précédente disparaît. 
 				//À ce moment, cette fonction a été abolie.
-				//说明：打开下一行代码（根据需求自行调整），获得功能：在选择一个带参数的方法后，再选择一个不带参数的方法，上一个方法的参数输入框消失
 				//document.getElementById('divParamNew').style.display = "none";
 			}
 			return selectFlagNew;
 		}
 		else
 		{
-			document.getElementById('#td:'+id).click();//模拟点击
-			alert('Les types des méthodes que vous choisissez sont différents, le choix n\'est pas valide!');//把alert置于click之前，则不会出现勾选动作（根据需求自行调整）
-			if (paramsHeuristique.length > 2) //Si heuristique, supprimez la zone de saisie dynamique(若带参则删除动态框)
+			document.getElementById('#td:'+id).click();
+			alert('Les types des méthodes que vous choisissez sont différents, le choix n\'est pas valide!');
+			if (paramsHeuristique.length > 2) //Si heuristique, supprimez la zone de saisie dynamique
 			{
 				var myboxDelete = document.getElementById(divid);
 				myboxDelete.parentNode.removeChild(myboxDelete);
@@ -232,7 +227,6 @@ function getParams2(id, nom, paramsHeuristique, Bp) {
 		//paramsHeuristiqueDouble[i][2]=paramsHeuristiqueDouble[i][0].length;
 	}
 	if (paramsHeuristique.length > 2) {
-		//alert(paramsHeuristiqueCut.length);
 		document.getElementById('divParamNew').style.display = "";
 		const
 		param =
@@ -243,7 +237,6 @@ function getParams2(id, nom, paramsHeuristique, Bp) {
 				+ nom
 				+ " :</legend>"
 				+
-				//"<input type='button' value='Valider' onclick='upParamHeuristique()'>"+//bouton de Valider
 				"<c:forEach items='${params.keySet()}' var='key'>"
 				+ "<div>"
 				+ "<br/><br/>"
@@ -262,8 +255,6 @@ function getParams2(id, nom, paramsHeuristique, Bp) {
 		//$('#divParamNew').append(param);	
 		var Bp2 = Bp;
 		Bp++;
-		//alert(paramsHeuristiqueDouble[0][0]);
-		//alert(Bp2);
 		document.getElementById('divParamNew').innerHTML = param;
 		for (var i = 0; i < paramsHeuristiqueCut.length - 1; i++)
 			Bp = addParamHeuristique2(paramsHeuristiqueCut[i + 1], i + 1, Bp);
@@ -309,47 +300,6 @@ function getSelected() {
 	}
 }
 
-/*已经被废弃的button
- function getSelected2(buttonFlag) {
- if(buttonFlag == 1)
- {
- alert("Vous avez obtenu les paramètres historiques de cette méthode et vous n'avez pas besoin de la récupérer à plusieurs reprises.");	
- return buttonFlag;
- }
- if(buttonFlag == 2)
- {
- alert("Vous avez changé la méthode sous ce test.");	
- return buttonFlag;
- }
- const
- selectedMethodes = $('#methodes').DataTable().rows({
- selected : true
- }).nodes();
- for (var i = 0; i < selectedMethodes.length; i++) {
- var str = selectedMethodes[i].innerHTML;
- //alert(str);
- var x=str.indexOf('getParams(');
- var y=str.indexOf('class=');
- var str1=str.substring(x+10,y-4) 
- strCut = str1.split(";");
- var x1=strCut[1].indexOf('&quot');
- var strCut1=strCut[1].substring(0,x1);
- //alert(strCut1);
- var y1=strCut[3].indexOf('&quot');
- var strCut3=strCut[3].substring(0,y1);
- //alert(strCut3);
- var titleGet = document.getElementById('title').innerHTML;
- var titleCut=titleGet.substring(0,12) ;
- if(titleCut == 'Modification')
- {
- getParams2(selectedMethodes[i].id,strCut1,strCut3);
- }    
-
- }
- buttonFlag = 1 ;
- return buttonFlag;
- }
- */
 function validForm() {
 	const
 	selectedMethodes = $('#methodes').DataTable().rows({

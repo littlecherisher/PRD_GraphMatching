@@ -40,7 +40,6 @@ public class TestMethodeDAO extends DAO<TestMethode>{
         CriteriaQuery<TestMethode> query = cb.createQuery(TestMethode.class);
         Root<TestMethode> testmethode = query.from(TestMethode.class);
         query.select(testmethode);
-        //query.where(cb.equal(testmethode.get("visible"), true));
         List<TestMethode> tm = session.createQuery(query).getResultList();
         session.close();
         return tm;

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Servlet FicheMethode gérant la création, la modification et l'affichage d'une Methode
+ * Servlet FicheMethodeExacte gérant la création, la modification et l'affichage d'une Methode exacte
  */
 @WebServlet("/FicheMethodeExacte")
 @MultipartConfig
@@ -37,7 +37,7 @@ public class FicheMethodeExacteServlet extends HttpServlet {
 
     /**
      * Affiche la fiche d'une Methode ou une fiche vide pour une création
-     * renvoie sur ficheMethode.jsp
+     * renvoie sur ficheMethodeExacte.jsp
      * @param req requete contenant éventuellement l'identifiant de la Methode à afficher (dataset)
      * @param resp reponse
      * @throws ServletException
@@ -59,7 +59,7 @@ public class FicheMethodeExacteServlet extends HttpServlet {
 
     /**
      * Créé ou modifie un objet Methode
-     * renvoie sur ficheMethode.jsp
+     * renvoie sur ficheMethodeExacte.jsp
      * @param req requete contenant les informations saisies dans le formulaire
      * @param resp reponse
      * @throws ServletException
