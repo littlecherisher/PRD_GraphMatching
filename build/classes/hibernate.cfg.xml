@@ -16,12 +16,12 @@
         <!--<property name="connection.pool_size">1000000000</property>-->
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
         <property name="hibernate.current_session_context_class">thread</property>
-        <mapping class="Model.Methode"/>
-        <mapping class="Model.Parametre"/>
+        <mapping class="Model.Methode"/>        
         <mapping class="Model.Dataset"/>
         <mapping class="Model.Test"/>
         <mapping class="Model.Subset"/>
         <mapping class="Model.Execution"/>
+        <mapping class="Model.Parametre"/>
         <mapping class="Model.TestMethode"/>
         <mapping class="Model.TestMethodeParametre"/>
     </session-factory>

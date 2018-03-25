@@ -17,7 +17,7 @@ import java.util.List;
 public class DatasetDAO extends DAO<Dataset> {
 
     /**
-     *récupère un objet Dataset de la base de données suivant son identifiant
+     * récupère un objet Dataset de la base de données suivant son identifiant
      * @param id identifiant du Dataset à récupérer
      * @return objet Dataset correpondant à l'identifiant id
      */
