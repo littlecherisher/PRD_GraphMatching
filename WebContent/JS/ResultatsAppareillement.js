@@ -30,8 +30,6 @@ function info(id, iflag) {
 }
 
 function getGraphesData() {
-	//由于数组维数过高，建议在低端显卡环境下谨慎使用 alert调试，否则容易出现浏览器卡顿或假死的情况
-	//代码块1：读取页面表格数据，同时生成二维数组data_VC0（用于双图连线）和getGraphNum
 	//Partie 1：Lisez les données de la table de pages et générez un tableau bidimensionnel data_VC0 (pour la correspondance à double image) et getGraphNum.
 	{
 		var data_VC0 = [];
@@ -56,7 +54,6 @@ function getGraphesData() {
 			}
 		}
 	}
-	//代码块2：读取dat文件并进行数据拆分，生成三维数组GraphesData_V_V和GraphesData_E_E
 	//Partie 2: Lisez le fichier .dat et effectuez une division des données pour générer un tableau tridimensionnel de GraphsData_V_V et Graphs_Data_E_E
 	{
 		var getGraphesData = document.getElementById('getGraphesData').value;
@@ -120,7 +117,6 @@ function getGraphesData() {
 			}
 		}
 	}
-	//代码块3:数据查询，生成当前选择下两张图的二维数组data_V1，data_V2，data_E1和data_E2
 	//Partie 3: Requête de données pour générer un tableau bidimensionnel de deux images sélectionnées par l'utilisateur actuel (data_V1,data_V2,data_E1,data_E2)
 	{
 		var moleculeNo = [];
@@ -165,7 +161,6 @@ function getGraphesData() {
 			data_E2[i][2] = GraphesData_E_E[moleculeNo[1]][i][2];
 		}
 	}
-	//代码块4：数据预处理，通过格式转化强化数据的可用性，生成三维数组data_V和data_E
 	//Partie 4：Pré-traitement des données, améliorez la disponibilité des données grâce à la conversion de format, générez des données tridimensionnelles data_V et data_E
 	{
 		var data_V = [];
@@ -213,7 +208,7 @@ function getGraphesData() {
 				}
 				break;
 			default:
-				alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");//默认图像数量为2，请添加case
+				alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
 			}
 			for (var v = 0; v < data_V_length; v++) {
 				data_V[k][v] = [];
@@ -238,17 +233,12 @@ function getGraphesData() {
 			data_VC[c][1] = 'b' + data_VC[c][1].toString();
 		}
 	}
-	//代码块5
-	/*
-		可视化-将两幅图片分别出图，并在总图中显示两图关联点的连线
-		代码优化-使用三维数组和函数循环运行相关代码，消除近似重复代码750行,提高代码适用性
-		完善的动力系统-0.2向心力，模拟双重心，可变的边距权重，可变点的斥力
-	 */
+	//Partie 5
 	/*
 	Visualisation - tracez les deux images séparément et montrez la connexion des points des deux graphiques dans le graphique total.
 	Optimisation du code - Utilise des tableaux tridimensionnels et des fonctions pour parcourir le code pertinent, éliminant environ 750 lignes de code non-pratique, améliorant ainsi l'applicabilité du code.
 	Amélioration du système dynamique - force centripète de 0.2, simulation de double coeur, poids de marge variable, répulsion de point variable.
-	 */
+	*/
 	{
 		for (var justpre = 0; justpre < 3; justpre++) {
 			var k;
@@ -265,7 +255,7 @@ function getGraphesData() {
 				flag = 1;
 			}
 			//alert("k="+k+"\n"+"flag="+flag);
-			if (flag == 0) {//Configuration du paramètre du système de gravité重力系统参数配置
+			if (flag == 0) {//Configuration du paramètre du système de gravité
 				switch (k) {
 				case 0:
 					var graph_cplex1 = echarts.init(document
@@ -280,7 +270,7 @@ function getGraphesData() {
 					graphName = graphNum[1];
 					break;
 				default:
-					alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");//默认图像数量为2，请添加case
+					alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
 				}
 				var symbolpre = 1.1;
 				var symbloX = null;
@@ -306,7 +296,7 @@ function getGraphesData() {
 					graphpre = document.getElementById('graph_cplex');
 					symbloX = graphpre.offsetWidth * kk;
 				}
-				for (var i = 0; i < data_V[kk].length; i++) {//dessiner les nœuds描点
+				for (var i = 0; i < data_V[kk].length; i++) {//dessiner les nœuds
 					var symbolsize = 12;
 					var symbolcolor = '#808080';
 					var labelcolor = '#FFFFFF';
@@ -381,7 +371,7 @@ function getGraphesData() {
 						}
 					});
 				}
-				for (var j = 0; j < data_E[kk].length; j++) {//dessiner les arcs连线
+				for (var j = 0; j < data_E[kk].length; j++) {//dessiner les arcs
 					var lineWidth = 3;
 					lineValue = 300;
 					if (data_E[kk][j][2] != 2) {
@@ -428,7 +418,7 @@ function getGraphesData() {
 					}
 				}
 			}
-			if (flag == 1) {//dessiner des lignes entre deux graphes双图连接线
+			if (flag == 1) {//dessiner des lignes entre deux graphes
 				for (c = 0; c < data_VC.length; c++) {
 					link_c.push({
 						source : data_VC[c][0],
@@ -478,11 +468,11 @@ function getGraphesData() {
 						}
 					},
 					layout : 'force',
-					force : {//力场
-						layoutAnimation : true,//显示迭代动画
-						gravity : 0.2,//向心力
-						repulsion : repulsion,//点间斥力
-						edgeLength : [ 1, edgeLength ]//边的距离范围
+					force : {
+						layoutAnimation : true,
+						gravity : 0.2,
+						repulsion : repulsion,
+						edgeLength : [ 1, edgeLength ]
 					},
 					coordinateSystem : null,
 					ribbonType : true,
@@ -506,7 +496,7 @@ function getGraphesData() {
 					graph_cplex2.setOption(option);
 					break;
 				default:
-					alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");//默认图像数量为2，请添加case
+					alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
 				}
 			} else {
 				graph_cplex.setOption(option);
@@ -516,7 +506,6 @@ function getGraphesData() {
 }
 
 function getSimpleData() {
-	//代码块6：读取页面表格数据，同时生成二维数组data_VC0（用于双图连线）和getGraphNum
 	//Partie 6: Lire les données de la table de pages, générer un tableau bidimensionnel data_VC0 (pour une connexion à double image) et getGraphNum
 	{
 		var data_VC0 = [];
@@ -541,7 +530,6 @@ function getSimpleData() {
 			}
 		}
 	}
-	//代码块7：读取dat文件并进行数据拆分，生成三维数组GraphesData_V_V和GraphesData_E_E
 	//Partie 7: Lisez le fichier .dat et effectuez une division des données pour générer un tableau tridimensionnel de GraphsData_V_V et Graphs_Data_E_E
 	{
 		var getGraphesData = document.getElementById('getGraphesData').value;
@@ -623,7 +611,6 @@ function getSimpleData() {
 		}
 		 */
 	}
-	//代码块8:数据查询，生成当前选择下两张图的二维数组data_V1，data_V2，data_E1_O和data_E2_O
 	//Partie 8: Requête de données pour générer un tableau bidimensionnel de deux images sélectionnées par l'utilisateur actuel (data_V1,data_V2,data_E1,data_E2)
 	{
 		var moleculeNo = [];
@@ -678,7 +665,6 @@ function getSimpleData() {
 			}
 		}
 	}
-	//代码块9：数据分流处理，将data_E1_O和data_E2_O处理为data_E1和data_E2
 	//Partie 9: Le processus de déchargement des données traite data_E1_O et data_E2_O comme data_E1 et data_E2.
 	{
 		var data_E1 = [];
@@ -722,7 +708,6 @@ function getSimpleData() {
 			}
 		}
 	}
-	//代码块10：数据预处理，通过格式转化强化数据的可用性，生成三维数组data_V和data_E
 	//Partie 10：Pré-traitement des données, améliorez la disponibilité des données grâce à la conversion de format, générez des données tridimensionnelles data_V et data_E
 	{
 		var data_V = [];
@@ -772,7 +757,7 @@ function getSimpleData() {
 				}
 				break;
 			default:
-				alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");//默认图像数量为2，请添加case
+				alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
 			}
 			for (var v = 0; v < data_V_length; v++) {
 				data_V[k][v] = [];
@@ -798,12 +783,7 @@ function getSimpleData() {
 			data_VC[c][1] = 'b' + data_VC[c][1].toString();
 		}
 	}
-	//代码块11
-	/*
-		可视化-将两幅图片分别出图，并在总图中显示两图关联点的连线
-		代码优化-使用三维数组和函数循环运行相关代码，消除近似重复代码750行,提高代码适用性
-		完善的定点系统-跟随画布大小自动生成定点
-	 */
+	//Partie 11
 	/*
 	Visualisation - tracez les deux images séparément et montrez la connexion des points des deux graphiques dans le graphique total.
 	Optimisation du code - Utilise des tableaux tridimensionnels et des fonctions pour parcourir le code pertinent, éliminant environ 750 lignes de code non-pratique, améliorant ainsi l'applicabilité du code.
@@ -839,7 +819,7 @@ function getSimpleData() {
 	                    graphName = graphNum[1];
 	                    break;
 	                default:
-	                    alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");//默认图像数量为2，请添加case
+	                    alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
 	            }
 	            var symbolpre = 1.8;
 	            var xNodepre = 1;
@@ -857,7 +837,7 @@ function getSimpleData() {
 	            var kk = k + graphNo;
 	            var xNode = kk*flag*xNodepre;
 	            xNode = Number(xNode);
-	            for (var i = 0; i < data_V[kk].length; i++) {//dessiner les nœuds描点
+	            for (var i = 0; i < data_V[kk].length; i++) {//dessiner les nœuds
 	                data_c.push
 	                (
 	                    {
@@ -881,7 +861,7 @@ function getSimpleData() {
 	                    }
 	                );
 	            }
-	            for (var j = 0; j < data_E[kk].length; j++) {//dessiner les arcs连线
+	            for (var j = 0; j < data_E[kk].length; j++) {//dessiner les arcs
 	                var lineWidth = 3;
 	                var lineValue = 1;
 	                var curvenesspre = 1000;
@@ -906,7 +886,7 @@ function getSimpleData() {
 	                );
 	            }
 	        }
-	        if (flag == 1) {//dessiner des lignes entre deux graphes双图连接线
+	        if (flag == 1) {//dessiner des lignes entre deux graphes
 	            for (c = 0; c < data_VC.length; c++) {
 	                link_c.push
 	                (
@@ -977,7 +957,7 @@ function getSimpleData() {
 	                    graph_cplex2.setOption(option);
 	                    break;
 	                default:
-	                    alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");//默认图像数量为2，请添加case
+	                    alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
 	            }
 	        }
 	        else {
@@ -993,15 +973,15 @@ function draw(iflag) {
 	} else {
 		var getDat = document.getElementById('getGraphesData').value;
 		if (getDat.indexOf('molecule_') >= 0) {
-			//alert("MUTA");//识别为化学键图
+			//alert("MUTA");
 			document.getElementById("graph").style.display = "";
 			getGraphesData();
 		} else if (getDat.indexOf('sampletest') >= 0) {
-			//alert("PAH");//识别为简单图
+			//alert("PAH");
 			document.getElementById("graph").style.display = "";
 			getSimpleData();
 		} else {
-			alert("Ne supporte pas la visualisation de tels graphiques")//不支持此类图的可视化操作
+			alert("Ne supporte pas la visualisation de tels graphiques")
 		}
 	}
 }

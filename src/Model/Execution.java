@@ -9,8 +9,6 @@ import Dao.TestMethodeParametreDAO;
 import Tools.Fichier;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.sun.xml.internal.ws.policy.sourcemodel.PolicyModelUnmarshaller;
-
 import javax.persistence.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -286,7 +284,8 @@ public class Execution implements Runnable {
      * Parcours les fichiers de sortie pour déterminer le nombre d'instances exécutées
      * @return nombre d'instances exécutées
      */
-    public int getNbInstancesExec() {
+    @SuppressWarnings("finally")
+	public int getNbInstancesExec() {
         BufferedReader in = null;
         int nb = 0;
         try {
@@ -314,7 +313,8 @@ public class Execution implements Runnable {
      * Parcours les fichiers de sortie pour déterminer le nombre d'instances qui ont échouées
      * @return nombre d'instances échouées
      */
-    public int getNbInstancesEchec() {
+    @SuppressWarnings("finally")
+	public int getNbInstancesEchec() {
         BufferedReader in = null;
         int nb = 0;
         try {
@@ -357,6 +357,7 @@ public class Execution implements Runnable {
     public int getNbInstancesAExec(){
         return getNbInstances() - (getNbInstancesExec() - getNbInstancesEchec());
     }
+    
     /**
      * redefinition de la méthode run de Runnable
      * met à jour l'état de l'Execution
@@ -780,9 +781,9 @@ public class Execution implements Runnable {
         String lastDataset = "";
         try {
             File file = new File("ProjetPRD\\Executions\\" + id + "\\output-" + idMethode + ".txt");
-            BufferedReader in = new BufferedReader(new FileReader(file));
+            @SuppressWarnings("resource")
+			BufferedReader in = new BufferedReader(new FileReader(file));
             String line;
-
             while ((line = in.readLine()) != null) {
                 String[] split = line.split(";");
                 for (int i = 0; i < split.length; i++) {
@@ -1017,7 +1018,8 @@ public class Execution implements Runnable {
         g2 = g2.substring(g2.lastIndexOf("\\")+1);
         try {
             File file = new File(path);
-            BufferedReader in = new BufferedReader(new FileReader(file));
+            @SuppressWarnings("resource")
+			BufferedReader in = new BufferedReader(new FileReader(file));
             String line = "";
             while((line = in.readLine()) != null){
                 //si une ligne contient dataset + graphes

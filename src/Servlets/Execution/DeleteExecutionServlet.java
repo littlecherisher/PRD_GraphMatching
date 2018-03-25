@@ -30,7 +30,6 @@ public class DeleteExecutionServlet extends HttpServlet{
         Object object = req.getParameter("id");
         ExecutionDAO executionDAO = new ExecutionDAO();
         if (object != null) {
-
             //on passe l'attribut visible à faux
             Execution execution = executionDAO.get(Long.parseLong(String.valueOf(object)));
             execution.setVisible();

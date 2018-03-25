@@ -255,9 +255,9 @@ public class Methode{
             //copie de la dll cplex1260.dll dans le répertoire si elle n'est pas présente
         	if(!new File(destination.toString()+"\\cplex1260.dll").exists())
         		//Implémentation locale
-        		//Files.copy(Paths.get("ProjetPRD","cplex1260.dll"),Paths.get(destination.toString(),"cplex1260.dll"));
+        		Files.copy(Paths.get("ProjetPRD","cplex1260.dll"),Paths.get(destination.toString(),"cplex1260.dll"));
         	    //Implémentation sur serveur
-        		Files.copy(Paths.get("cplex1260.dll"),Paths.get(destination.toString(),"cplex1260.dll"));
+        		//Files.copy(Paths.get("cplex1260.dll"),Paths.get(destination.toString(),"cplex1260.dll"));
         } catch (IOException e) {
             e.printStackTrace();
         }

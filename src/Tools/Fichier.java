@@ -199,7 +199,6 @@ public class Fichier {
                     if (f.exists()) graphes.add(p);
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -230,7 +229,6 @@ public class Fichier {
                     nb++;
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -268,7 +266,8 @@ public class Fichier {
     public static boolean FichierContient(String path, String chaine) {
         try {
             File file = new File(path);
-            BufferedReader in = new BufferedReader(new FileReader(file));
+            @SuppressWarnings("resource")
+			BufferedReader in = new BufferedReader(new FileReader(file));
             String c;
             while((c = in.readLine()) != null){
                 if(c.contains(chaine)) return true;

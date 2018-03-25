@@ -147,7 +147,6 @@
 		{
 			document.getElementById('inform').style.display = "none";
 		}
-		//alert(titleFlag);
 	</script>
 </form>
 </body>

@@ -65568,14 +65568,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    SaveAsImage.defaultOption = {
 	        show: true,
 	        icon: 'M4.7,22.9L29.3,45.5L54.7,23.4M4.6,43.6L4.6,58L53.8,58L53.8,43.6M29.2,45.1L29.2,0',
-	        title: '保存为图片',
+	        title: 'Enregistrer',
 	        type: 'png',
 	        // Default use option.backgroundColor
 	        // backgroundColor: '#fff',
 	        name: '',
 	        excludeComponents: ['toolbox'],
 	        pixelRatio: 1,
-	        lang: ['右键另存为图片']
+	        lang: ['Enregistrer sous']
 	    };
 
 	    SaveAsImage.prototype.unusable = !env.canvasSupported;
@@ -66781,7 +66781,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Restore.defaultOption = {
 	        show: true,
 	        icon: 'M3.8,33.4 M47,18.9h9.8V8.7 M56.3,20.1 C52.1,9,40.5,0.6,26.8,2.1C12.6,3.7,1.6,16.2,2.1,30.6 M13,41.1H3.1v10.2 M3.7,39.9c4.2,11.1,15.8,19.5,29.5,18 c14.2-1.6,25.2-14.1,24.7-28.5',
-	        title: '还原'
+	        title: 'Réinitialiser'
 	    };
 
 	    var proto = Restore.prototype;

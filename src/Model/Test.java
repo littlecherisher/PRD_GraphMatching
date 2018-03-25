@@ -117,7 +117,6 @@ public class Test {
         params = new ArrayList<>();
         paramsH = new ArrayList<>();
         paramsHeu = new HashMap<>();
-        //paramsHeuTotal = new HashMap<String, Map<String, String>>();
         subsets = new ArrayList<>();
         visible = true;
     }

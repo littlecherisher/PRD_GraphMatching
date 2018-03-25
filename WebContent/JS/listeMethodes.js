@@ -19,5 +19,4 @@ function modif(id, paramsHeuristique) {
 	}else{
 		document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + id;
 	}
-	//document.location.href = '/GraphMatching/FicheMethodeExacte?methode=' + methode;
 };

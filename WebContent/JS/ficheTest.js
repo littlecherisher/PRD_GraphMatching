@@ -1,6 +1,7 @@
 /**
  * Created by Kai on 24/01/2018.
  */
+
 $(document).ready(function() {
 	const
 	methodes = $('#methodes').DataTable({
@@ -146,7 +147,6 @@ function getParams(id, nom, paramsHeuristique, selectFlag,countFlag) {
 						+ nom
 						+ " :</legend>"
 						+
-						//"<input type='button' value='Valider' onclick='upParamHeuristique()'>"+//bouton de Valider
 						"<c:forEach items='${params.keySet()}' var='key'>"
 						+ "<div>"
 						+ "<br/><br/>"
@@ -161,8 +161,7 @@ function getParams(id, nom, paramsHeuristique, selectFlag,countFlag) {
 						+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
 						+ "</input>"
 						+ "<input type='text' name='valeursParamHeu[]' id='valeursParamHeu[]' style='font-size:14px' size='10' required='required' value=''${key}'/>"
-						+ "</div>" + "</c:forEach>" + "</fieldset>" + "</div>";
-				//$('#divParamNew').append(param);	
+						+ "</div>" + "</c:forEach>" + "</fieldset>" + "</div>";	
 				document.getElementById('divParamNew').innerHTML = param;
 				for (var i = 0; i < paramsHeuristiqueCut.length - 1; i++)
 					addParamHeuristique(paramsHeuristiqueCut[i + 1], i + 1);
@@ -170,13 +169,10 @@ function getParams(id, nom, paramsHeuristique, selectFlag,countFlag) {
 				paramNew = document.getElementById('divParamNew').innerHTML;
 				document.getElementById('divParamNew').innerHTML = "";
 				$('#divParamNewLarge').append(paramNew);
-				//$('#divParamNew').append(paramNew);
-				//document.getElementById('divParamNew').innerHTML = paramNew;
 				document.getElementById('divParamNew2').id = "##" + id;
 				for (var i = 0; i < paramsHeuristiqueCut.length; i++) {
 					document.getElementById('**' + i).value = paramsHeuristiqueDouble[i][0];
 					document.getElementById('***' + i).value = paramsHeuristiqueDouble[i][1];
-					//document.getElementById('**'+i).style.size = 1+'px';
 					document.getElementById('**' + i).id = 'already';
 					document.getElementById('***' + i).id = 'already2';
 				}
@@ -224,13 +220,11 @@ function getParams2(id, nom, paramsHeuristique, Bp) {
 		paramsHeuristiqueDouble[i][0] = paramsHeuristiqueCut[i].substring(0, a);
 		paramsHeuristiqueDouble[i][1] = paramsHeuristiqueCut[i]
 				.substring(a + 4);
-		//paramsHeuristiqueDouble[i][2]=paramsHeuristiqueDouble[i][0].length;
 	}
 	if (paramsHeuristique.length > 2) {
 		document.getElementById('divParamNew').style.display = "";
 		const
 		param =
-		/*"<c:set var='params' value='${TestMethodeParametre.valeur}'/>"+*/
 		"<div id='divParamNew2'>"
 				+ "<fieldset id='paramNecH'>"
 				+ "<legend id='divParamNew3'>Veuillez entrer les valeurs des paramètres nécessaires pour "
@@ -252,7 +246,6 @@ function getParams2(id, nom, paramsHeuristique, Bp) {
 				+ "</input>"
 				+ "<input type='text' name='valeursParamHeu[]' id='##**' style='font-size:14px' size='10' ' value=''${TestMethodeParametre.valeur}'/>"
 				+ "</div>" + "</c:forEach>" + "</fieldset>" + "</div>";
-		//$('#divParamNew').append(param);	
 		var Bp2 = Bp;
 		Bp++;
 		document.getElementById('divParamNew').innerHTML = param;
@@ -262,14 +255,11 @@ function getParams2(id, nom, paramsHeuristique, Bp) {
 		paramNew = document.getElementById('divParamNew').innerHTML;
 		document.getElementById('divParamNew').innerHTML = "";
 		$('#divParamNewLarge').append(paramNew);
-		//$('#divParamNew').append(paramNew);
-		//document.getElementById('divParamNew').innerHTML = paramNew;
 		document.getElementById('divParamNew2').id = "##" + id;
 		document.getElementById('##**').id = "##**" + Bp2;
 		for (var i = 0; i < paramsHeuristiqueCut.length; i++) {
 			document.getElementById('**' + i).value = paramsHeuristiqueDouble[i][0];
 			document.getElementById('***' + i).value = paramsHeuristiqueDouble[i][1];
-			//document.getElementById('**'+i).style.size = 1+'px';
 			document.getElementById('**' + i).id = 'already';
 			document.getElementById('***' + i).id = 'already2';
 		}
