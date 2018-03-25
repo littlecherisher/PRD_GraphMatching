@@ -249,7 +249,7 @@ public class Execution implements Runnable {
 
     /**
      * Setter : modifie la liste des paramètres heuristiques associés à l'Execution
-     * @param params nouvelle liste des paramètres heuristiques associés à l'Execution
+     * @param paramsH nouvelle liste des paramètres heuristiques associés à l'Execution
      */
     public void setParamsH(List<String> paramsH) {
         this.paramsH = paramsH;

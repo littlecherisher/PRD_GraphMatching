@@ -74,7 +74,6 @@ public class Methode{
 
     /**
      * Constructeur par défaut de la classe Methode
-     * @param id identifiant de la Methode
      */
     public Methode() {
     }

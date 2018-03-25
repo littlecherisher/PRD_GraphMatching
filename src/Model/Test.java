@@ -280,7 +280,7 @@ public class Test {
     
     /**
      * Ajoute un paramètre heuristique à la liste (contient nom et type)
-     * @param nom nom du paramètre heuristique
+     * @param nomType nom du paramètre heuristique
      * @param valeur valeur du paramètre heuristique
      */
     public void addParamHeuris(String nomType, String valeur) {
