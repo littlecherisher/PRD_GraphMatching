@@ -66,7 +66,6 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			<!-- <input type='button' id='buttonModification' value='Récupère les paramètres historiques' onclick='buttonFlag = getSelected2(buttonFlag)'> -->
 			<script type="text/javascript">
 			var titleGet = document.getElementById('title').innerHTML;
 			var titleCut=titleGet.substring(0,12) ;
@@ -87,6 +86,29 @@
             </thead>
             <tbody>
             <c:forEach items="${datasets}" var="dataset">
+                <tr
+                        <c:if test="${test.datasets.contains(dataset)}">
+                            <c:out value="class=memo "/>
+                        </c:if>
+                        id=<c:out value="${dataset.id}"/>>
+                    <td></td>
+                    <td><c:out value="${dataset.nom}"/></td>
+                    <td></td>
+                </tr>
+                <c:forEach items="${dataset.getSubsets()}" var="subset">
+                    <tr
+                            <c:if test="${test.subsets.contains(subset)}">
+                                <c:out value="class=memo "/>
+                            </c:if>
+                            id=<c:out value="${dataset.id}-${subset.id}"/>>
+                        <td></td>
+                        <td></td>
+                        <td><c:out value="${subset.nom}"/></td>
+                    </tr>
+                </c:forEach>
+            </c:forEach>
+            <!-- 
+            <c:forEach items="${datasets}" var="dataset">
                 <c:forEach items="${dataset.getSubsets()}" var="subset">
                     <tr
                             <c:if test="${test.subsets.contains(subset)}">
@@ -99,6 +121,7 @@
                     </tr>
                 </c:forEach>
             </c:forEach>
+             -->
             </tbody>
         </table>
     </div>
@@ -217,7 +240,6 @@
     </div>
 </form>
 <script type="text/javascript">
-	//alert(countFlag);
 	var iMethodeNom = [];
 	var iMethodeParamsHeuristique = [];
 	var j = 0;
@@ -230,10 +252,8 @@
 					
 				iMethodeNom[j] = document.getElementById('#nom#' + i).value;
 				iMethodeParamsHeuristique[j] = document.getElementById('#params#' + i).value;
-				//alert(iMethodeNom[j]);//Pour voir la zone de saisie avant sa disparition 
-				//alert(iMethodeParamsHeuristique[j]);
 				Bp = getParams2(i,iMethodeNom[j],iMethodeParamsHeuristique[j],Bp);
-				if (iMethodeParamsHeuristique[j].length > 2 )//Comparaison de différents types de méthodes
+				if (iMethodeParamsHeuristique[j].length > 2 )//Comparaison de différents types de méthodes(不同类型方法比较操作)
 					selectFlag = 2;//heuristique
 				else
 					selectFlag = 1;//exacte
@@ -244,7 +264,6 @@
 		document.getElementById('#nom#' + i).id = "delete2";
 		document.getElementById('#params#' + i).id = "delete3";
 	}
-	//alert(countParamFlag);
 	var testMethodeParametreValeur = [];
 	for (i=0;i<countParamFlag;i++)
 		{

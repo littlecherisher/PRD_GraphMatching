@@ -272,10 +272,10 @@ public class Execution implements Runnable {
     public void setNbInstances() {
         nbInstances = 0;
         for (Dataset d : datasets) {
-            nbInstances += Math.pow((factorielle(d.getNbGraphes()) / (factorielle(d.getNbGraphes() - 1))), 2);
+            nbInstances += Math.pow(d.getNbGraphes(), 2);
         }
         for (Subset s : subsets) {
-            nbInstances += Math.pow((factorielle(s.getNbGraphes()) / (factorielle(s.getNbGraphes() - 1))), 2);
+            nbInstances += Math.pow(s.getNbGraphes(), 2);
         }
         nbInstances *= methodes.size();
     }
@@ -991,20 +991,6 @@ public class Execution implements Runnable {
         return parametresH;
     }
 
-
-    /**
-     * Calcul la factorielle
-     * @param n paramètre de la factorielle à calculer
-     * @return résultat de la factorielle
-     */
-    private int factorielle(int n){
-        if(n == 0){
-            return 1;
-        }else{
-            return n * factorielle(n-1);
-        }
-    }
-
     /**
      * Determine si l'instance doit être (ré)exécutée
      * @param path chemin du fichier résultat
@@ -1149,9 +1135,29 @@ public class Execution implements Runnable {
     	String GrapheFiles = "";
     	
     	//pour chaque dataset
-		/*for (Dataset d : datasets) {
+		for (Dataset d : datasets) {
 			GrapheFileNames = Fichier.listeFichiers(d.getDataset());
-		}*/
+			for(int i = 0; i < GrapheFileNames.size(); i++){
+				String path = GrapheFileNames.get(i);
+                File f = new File(path);
+				try {
+					in = new BufferedReader(new FileReader(f));
+					String line = null;
+					try {
+						while ((line = in.readLine()) != null) {
+							GrapheFiles += line;
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				GrapheFiles += "\n";
+			}
+		}
     	//pour chaque subset
 		for (Subset s : subsets) {
 			GrapheFileNames = Fichier.lectureSubset(s.getChemin());

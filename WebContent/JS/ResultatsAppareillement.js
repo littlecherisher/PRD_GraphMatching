@@ -1,6 +1,5 @@
 /**
- * Created by kevmi on 26/01/2017. 
- * Modified by Kai on 24/02/2018.
+ * Created by kevmi on 26/01/2017. Modified by Kai on 24/02/2018.
  */
 
 function info(id, iflag) {
@@ -29,8 +28,18 @@ function info(id, iflag) {
 	return iflag;
 }
 
+function find(str, cha, num) {
+	var x = str.indexOf(cha);
+	for (var i = 0; i < num; i++) {
+		x = str.indexOf(cha, x + 1);
+	}
+	return x;
+}
+
 function getGraphesData() {
-	//Partie 1：Lisez les données de la table de pages et générez un tableau bidimensionnel data_VC0 (pour la correspondance à double image) et getGraphNum.
+	// Partie 1：Lisez les données de la table de pages et générez un tableau
+	// bidimensionnel data_VC0 (pour la correspondance à double image) et
+	// getGraphNum.
 	{
 		var data_VC0 = [];
 		var tb = document.getElementById("noeuds");
@@ -43,26 +52,45 @@ function getGraphesData() {
 			for (var j = 0; j < cells.length; j++) {
 				if (i == 0) {
 					var getGraphNum = cells[j].innerHTML;
-					var x = getGraphNum.indexOf('molecule_');
+					var x = getGraphNum.indexOf('>');
 					var y = getGraphNum.indexOf('</div>');
-					graphNum[j] = getGraphNum.substring(x, y);
-					// alert(graphNum[j]);
+					graphNum[j] = getGraphNum.substring(x + 1, y);
 				} else {
 					data_VC0[i - 1][j] = cells[j].innerHTML;
-					// alert(data_VC0[i-1][j]);
 				}
 			}
 		}
 	}
-	//Partie 2: Lisez le fichier .dat et effectuez une division des données pour générer un tableau tridimensionnel de GraphsData_V_V et Graphs_Data_E_E
+	// Partie 2: Lisez le fichier .dat et effectuez une division des données
+	// pour générer un tableau tridimensionnel de GraphsData_V_V et
+	// Graphs_Data_E_E
 	{
 		var getGraphesData = document.getElementById('getGraphesData').value;
-		var cutGraphesData = getGraphesData.split("molecule_");
+		var cutGraphesData = getGraphesData.split("attributes:1,chem:string,");
 		var GraphesData = [];
+		var GraphesNewName = [];
+		var yGraphesNewName0 = cutGraphesData[0].indexOf(' ');
+		if (yGraphesNewName0 < 1) {
+			GraphesNewName[0] = cutGraphesData[0].substring(0);
+		} else {
+			GraphesNewName[0] = cutGraphesData[0]
+					.substring(0, yGraphesNewName0);
+		}
 		for (var i = 1; i < cutGraphesData.length; i++) {
-			cutGraphesData[i] = "molecule_" + cutGraphesData[i];
-			GraphesData[i - 1] = cutGraphesData[i];
-			// alert(GraphesData[i-1]);
+			var times = (cutGraphesData[i].split('valence:')).length - 1;
+			var locations = find(cutGraphesData[i], 'valence:', times - 1);
+			var locations2 = cutGraphesData[i].indexOf(' ');
+			if (locations2 < 1) {
+				GraphesNewName[i] = cutGraphesData[i].substring(locations + 9);
+			} else {
+				GraphesNewName[i] = cutGraphesData[i].substring(locations + 9,
+						locations2);
+			}
+			GraphesData[i - 1] = GraphesNewName[i - 1] + cutGraphesData[i];
+			var times0 = (GraphesData[i - 1].split('valence:')).length - 1;
+			var locations0 = find(GraphesData[i - 1], 'valence:', times0 - 1);
+			GraphesData[i - 1] = GraphesData[i - 1]
+					.substring(0, locations0 + 9);
 		}
 		var GraphesData_Name = [];
 		var GraphesData_VE = [];
@@ -85,10 +113,9 @@ function getGraphesData() {
 			GraphesData_E_Z[i] = [];
 			GraphesData_V_V[i] = [];
 			GraphesData_E_E[i] = [];
-			x = GraphesData[i].indexOf('molecule_');
-			y = GraphesData[i].indexOf('undirected');
-			GraphesData_Name[i] = GraphesData[i].substring(x, y - 1)
-			//alert(GraphesData_Name[i]);
+			x = 0;
+			y = GraphesData[i].indexOf('E,from,to');
+			GraphesData_Name[i] = GraphesData[i].substring(x, y)
 			x = GraphesData[i].indexOf('valence:int,');
 			GraphesData_VE[i] = GraphesData[i].substring(x + 12);
 			x = GraphesData_VE[i].indexOf('E,');
@@ -117,7 +144,9 @@ function getGraphesData() {
 			}
 		}
 	}
-	//Partie 3: Requête de données pour générer un tableau bidimensionnel de deux images sélectionnées par l'utilisateur actuel (data_V1,data_V2,data_E1,data_E2)
+	// Partie 3: Requête de données pour générer un tableau bidimensionnel de
+	// deux images sélectionnées par l'utilisateur actuel
+	// (data_V1,data_V2,data_E1,data_E2)
 	{
 		var moleculeNo = [];
 		for (i = 0; i < GraphesData_Name.length; i++) {
@@ -135,10 +164,6 @@ function getGraphesData() {
 			data_V1[i][0] = GraphesData_V_V[moleculeNo[0]][i][0];
 			data_V1[i][1] = GraphesData_V_V[moleculeNo[0]][i][1];
 		}
-		/*
-		for (i=0;data_V1.length;i++)
-			alert("nodename:"+data_V1[i][0]+"\n"+"chemname:"+data_V1[i][1]);
-		 */
 		for (i = 0; i < GraphesData_V_V[moleculeNo[1]].length; i++) {
 			data_V2[i] = [];
 			data_V2[i][0] = GraphesData_V_V[moleculeNo[1]][i][0];
@@ -150,10 +175,6 @@ function getGraphesData() {
 			data_E1[i][1] = GraphesData_E_E[moleculeNo[0]][i][1];
 			data_E1[i][2] = GraphesData_E_E[moleculeNo[0]][i][2];
 		}
-		/*
-		for (i=0;data_E1.length;i++)
-			alert("from:"+data_E1[i][0]+"\n"+"to:"+data_E1[i][1]+"\n"+"valence:"+data_E1[i][2]);
-		 */
 		for (i = 0; i < GraphesData_E_E[moleculeNo[1]].length; i++) {
 			data_E2[i] = [];
 			data_E2[i][0] = GraphesData_E_E[moleculeNo[1]][i][0];
@@ -161,7 +182,9 @@ function getGraphesData() {
 			data_E2[i][2] = GraphesData_E_E[moleculeNo[1]][i][2];
 		}
 	}
-	//Partie 4：Pré-traitement des données, améliorez la disponibilité des données grâce à la conversion de format, générez des données tridimensionnelles data_V et data_E
+	// Partie 4：Pré-traitement des données, améliorez la disponibilité des
+	// données grâce à la conversion de format, générez des données
+	// tridimensionnelles data_V et data_E
 	{
 		var data_V = [];
 		var data_E = [];
@@ -233,12 +256,12 @@ function getGraphesData() {
 			data_VC[c][1] = 'b' + data_VC[c][1].toString();
 		}
 	}
-	//Partie 5
-	/*
-	Visualisation - tracez les deux images séparément et montrez la connexion des points des deux graphiques dans le graphique total.
-	Optimisation du code - Utilise des tableaux tridimensionnels et des fonctions pour parcourir le code pertinent, éliminant environ 750 lignes de code non-pratique, améliorant ainsi l'applicabilité du code.
-	Amélioration du système dynamique - force centripète de 0.2, simulation de double coeur, poids de marge variable, répulsion de point variable.
-	*/
+	// Partie 5: Visualisation - tracez les deux images séparément et montrez la connexion des 
+	// points des deux graphiques dans le graphique total. Optimisation du code - Utilise des 
+	// tableaux tridimensionnels et des fonctions pour parcourir le code pertinent, éliminant 
+	// environ 750 lignes de code non-pratique, améliorant ainsi l'applicabilité du code. 
+	// Amélioration du système dynamique - force centripète de 0.2, simulation de double coeur, 
+	// poids de marge variable, répulsion de point variable.	 
 	{
 		for (var justpre = 0; justpre < 3; justpre++) {
 			var k;
@@ -254,8 +277,7 @@ function getGraphesData() {
 				k = 0;
 				flag = 1;
 			}
-			//alert("k="+k+"\n"+"flag="+flag);
-			if (flag == 0) {//Configuration du paramètre du système de gravité
+			if (flag == 0) {// Configuration du paramètre du système de gravité
 				switch (k) {
 				case 0:
 					var graph_cplex1 = echarts.init(document
@@ -296,7 +318,7 @@ function getGraphesData() {
 					graphpre = document.getElementById('graph_cplex');
 					symbloX = graphpre.offsetWidth * kk;
 				}
-				for (var i = 0; i < data_V[kk].length; i++) {//dessiner les nœuds
+				for (var i = 0; i < data_V[kk].length; i++) {// dessiner les nœuds
 					var symbolsize = 12;
 					var symbolcolor = '#808080';
 					var labelcolor = '#FFFFFF';
@@ -371,7 +393,7 @@ function getGraphesData() {
 						}
 					});
 				}
-				for (var j = 0; j < data_E[kk].length; j++) {//dessiner les arcs
+				for (var j = 0; j < data_E[kk].length; j++) {// dessiner les arcs
 					var lineWidth = 3;
 					lineValue = 300;
 					if (data_E[kk][j][2] != 2) {
@@ -418,7 +440,7 @@ function getGraphesData() {
 					}
 				}
 			}
-			if (flag == 1) {//dessiner des lignes entre deux graphes
+			if (flag == 1) {// dessiner des lignes entre deux graphes
 				for (c = 0; c < data_VC.length; c++) {
 					link_c.push({
 						source : data_VC[c][0],
@@ -506,7 +528,9 @@ function getGraphesData() {
 }
 
 function getSimpleData() {
-	//Partie 6: Lire les données de la table de pages, générer un tableau bidimensionnel data_VC0 (pour une connexion à double image) et getGraphNum
+	// Partie 6: Lire les données de la table de pages, générer un tableau
+	// bidimensionnel data_VC0 (pour une connexion à double image) et
+	// getGraphNum
 	{
 		var data_VC0 = [];
 		var tb = document.getElementById("noeuds");
@@ -519,26 +543,50 @@ function getSimpleData() {
 			for (var j = 0; j < cells.length; j++) {
 				if (i == 0) {
 					var getGraphNum = cells[j].innerHTML;
-					var x = getGraphNum.indexOf('sampletest');
+					var x = getGraphNum.indexOf('>');
 					var y = getGraphNum.indexOf('</div>');
-					graphNum[j] = getGraphNum.substring(x, y);
-					//alert(graphNum[j]);
+					graphNum[j] = getGraphNum.substring(x + 1, y);
 				} else {
 					data_VC0[i - 1][j] = cells[j].innerHTML;
-					//alert(data_VC0[i-1][j]);
 				}
 			}
 		}
 	}
-	//Partie 7: Lisez le fichier .dat et effectuez une division des données pour générer un tableau tridimensionnel de GraphsData_V_V et Graphs_Data_E_E
+	// Partie 7: Lisez le fichier .dat et effectuez une division des données
+	// pour générer un tableau tridimensionnel de GraphsData_V_V et
+	// Graphs_Data_E_E
 	{
 		var getGraphesData = document.getElementById('getGraphesData').value;
-		var cutGraphesData = getGraphesData.split("sampletest");
+		var cutGraphesData = getGraphesData
+				.split("attributes:3,x:Integer,y:Integer,type:String,");
 		var GraphesData = [];
+		var GraphesNewName = [];
+		var yGraphesNewName0 = cutGraphesData[0].indexOf(' ');
+		if (yGraphesNewName0 < 1) {
+			GraphesNewName[0] = cutGraphesData[0].substring(0);
+		} else {
+			GraphesNewName[0] = cutGraphesData[0]
+					.substring(0, yGraphesNewName0);
+		}
 		for (var i = 1; i < cutGraphesData.length; i++) {
-			cutGraphesData[i] = "sampletest" + cutGraphesData[i];
-			GraphesData[i - 1] = cutGraphesData[i];
-			// alert(GraphesData[i-1]);
+			var times = (cutGraphesData[i].split('.')).length - 1;
+			var locations = find(cutGraphesData[i], '.', times - 2);
+			var locations2 = cutGraphesData[i].indexOf(' ');
+			if (locations2 < 1) {
+				GraphesNewName[i] = cutGraphesData[i].substring(locations + 3);
+			} else {
+				GraphesNewName[i] = cutGraphesData[i].substring(locations + 3,
+						locations2);
+			}
+			GraphesData[i - 1] = GraphesNewName[i - 1] + cutGraphesData[i];
+			if (i != cutGraphesData.length - 1) {
+				var times0 = (GraphesData[i - 1].split('.')).length - 1;
+				var locations0 = find(GraphesData[i - 1], '.', times0 - 2);
+				GraphesData[i - 1] = GraphesData[i - 1].substring(0,
+						locations0 + 5);
+			} else {
+				// alert("last");
+			}
 		}
 		var GraphesData_Name = [];
 		var GraphesData_VE = [];
@@ -561,10 +609,9 @@ function getSimpleData() {
 			GraphesData_E_Z[i] = [];
 			GraphesData_V_V[i] = [];
 			GraphesData_E_E[i] = [];
-			x = GraphesData[i].indexOf('sampletest');
-			y = GraphesData[i].indexOf('undirected');
-			GraphesData_Name[i] = GraphesData[i].substring(x, y - 1)
-			//alert(GraphesData_Name[i]);
+			x = 0;
+			y = GraphesData[i].indexOf('E,from,to');
+			GraphesData_Name[i] = GraphesData[i].substring(x, y);
 			x = GraphesData[i].indexOf('angle0:String,');
 			GraphesData_VE[i] = GraphesData[i].substring(x + 14);
 			x = GraphesData_VE[i].indexOf('E,');
@@ -602,16 +649,11 @@ function getSimpleData() {
 							.substring(x + 7);
 				}
 			}
-
 		}
-		/*
-		for (var test = 0;test<GraphesData_V_V[0].length;test++){
-			alert(GraphesData_V_V[0][test][0]+'\n'+GraphesData_V_V[0][test][1]+'\n'+
-					GraphesData_V_V[0][test][2]+'\n')
-		}
-		 */
 	}
-	//Partie 8: Requête de données pour générer un tableau bidimensionnel de deux images sélectionnées par l'utilisateur actuel (data_V1,data_V2,data_E1,data_E2)
+	// Partie 8: Requête de données pour générer un tableau bidimensionnel de
+	// deux images sélectionnées par l'utilisateur actuel
+	// (data_V1,data_V2,data_E1,data_E2)
 	{
 		var moleculeNo = [];
 		for (i = 0; i < GraphesData_Name.length; i++) {
@@ -630,10 +672,6 @@ function getSimpleData() {
 			data_V1[i][1] = GraphesData_V_V[moleculeNo[0]][i][1];
 			data_V1[i][2] = GraphesData_V_V[moleculeNo[0]][i][2];
 		}
-		/*
-		for (i=0;data_V1.length;i++)
-			alert("nodename:"+data_V1[i][0]+"\n"+"x:"+data_V1[i][1]+"\n"+"y:"+data_V1[i][2]);
-		 */
 		for (i = 0; i < GraphesData_V_V[moleculeNo[1]].length; i++) {
 			data_V2[i] = [];
 			data_V2[i][0] = GraphesData_V_V[moleculeNo[1]][i][0];
@@ -650,10 +688,6 @@ function getSimpleData() {
 				data_E1_O[i][4] = GraphesData_E_E[moleculeNo[0]][i][4];
 			}
 		}
-		/*
-		for (i=0;data_E1_O.length;i++)
-			alert("from:"+data_E1_O[i][0]+"\n"+"to:"+data_E1_O[i][1]+"\n"+"frequency:"+data_E1_O[i][2]+"\n"+"angle0:"+data_E1_O[i][3]);
-		 */
 		for (i = 0; i < GraphesData_E_E[moleculeNo[1]].length; i++) {
 			data_E2_O[i] = [];
 			data_E2_O[i][0] = GraphesData_E_E[moleculeNo[1]][i][0];
@@ -665,7 +699,8 @@ function getSimpleData() {
 			}
 		}
 	}
-	//Partie 9: Le processus de déchargement des données traite data_E1_O et data_E2_O comme data_E1 et data_E2.
+	// Partie 9: Le processus de déchargement des données traite data_E1_O et
+	// data_E2_O comme data_E1 et data_E2.
 	{
 		var data_E1 = [];
 		var data_E2 = [];
@@ -708,7 +743,9 @@ function getSimpleData() {
 			}
 		}
 	}
-	//Partie 10：Pré-traitement des données, améliorez la disponibilité des données grâce à la conversion de format, générez des données tridimensionnelles data_V et data_E
+	// Partie 10：Pré-traitement des données, améliorez la disponibilité des
+	// données grâce à la conversion de format, générez des données
+	// tridimensionnelles data_V et data_E
 	{
 		var data_V = [];
 		var data_E = [];
@@ -783,11 +820,14 @@ function getSimpleData() {
 			data_VC[c][1] = 'b' + data_VC[c][1].toString();
 		}
 	}
-	//Partie 11
 	/*
-	Visualisation - tracez les deux images séparément et montrez la connexion des points des deux graphiques dans le graphique total.
-	Optimisation du code - Utilise des tableaux tridimensionnels et des fonctions pour parcourir le code pertinent, éliminant environ 750 lignes de code non-pratique, améliorant ainsi l'applicabilité du code.
-	Amélioration du système dynamique - force centripète de 0.2, simulation de double coeur, poids de marge variable, répulsion de point variable.
+	 * Visualisation - tracez les deux images séparément et montrez la connexion
+	 * des points des deux graphiques dans le graphique total. Optimisation du
+	 * code - Utilise des tableaux tridimensionnels et des fonctions pour
+	 * parcourir le code pertinent, éliminant environ 750 lignes de code
+	 * non-pratique, améliorant ainsi l'applicabilité du code. Amélioration du
+	 * système dynamique - force centripète de 0.2, simulation de double coeur,
+	 * poids de marge variable, répulsion de point variable.
 	 */
 	{
 		for (var justpre = 0; justpre < 3; justpre++) {
@@ -804,166 +844,160 @@ function getSimpleData() {
 				k = 0;
 				flag = 1;
 			}
-			//alert("k="+k+"\n"+"flag="+flag);
-	        if(flag == 0){
-	            switch(k)
-	            {
-	                case 0:
-	                    var graph_cplex1 = echarts.init(document.getElementById('graph_cplex1'));
-	                    var data_V_length = data_V1.length;
-	                    var graphName = graphNum[0];
-	                    break;
-	                case 1:
-	                    var graph_cplex2 = echarts.init(document.getElementById('graph_cplex2'));
-	                    data_V_length = data_V2.length;
-	                    graphName = graphNum[1];
-	                    break;
-	                default:
-	                    alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
-	            }
-	            var symbolpre = 1.8;
-	            var xNodepre = 1;
-	        }
-	        else{
-	            var graph_cplex = echarts.init(document.getElementById('graph_cplex'));
-	            var graphpre = document.getElementById('graph_cplex');
-	            xNodepre = graphpre.offsetWidth/3*2;
-	            graphName = "La visualisation de GrapheMatching";
-	            symbolpre = 1.5;
-	        }
-	        var data_c=[];
-	        var link_c=[];
-	        for(var graphNo = 0;graphNo <= flag;graphNo++) {
-	            var kk = k + graphNo;
-	            var xNode = kk*flag*xNodepre;
-	            xNode = Number(xNode);
-	            for (var i = 0; i < data_V[kk].length; i++) {//dessiner les nœuds
-	                data_c.push
-	                (
-	                    {
-	                        name: data_V[kk][i][0],
-	                        showPosition: '('+data_V[kk][i][1]+','+data_V[kk][i][2]+')',
-	                        value: 5 * symbolpre ,
-	                        symbol: 'circle',
-	                        symbolSize: 5 * symbolpre ,
-	                        x: data_V[kk][i][1]+ xNode,
-	                        y: data_V[kk][i][2] ,
-	                        itemStyle: {
-	                            normal: {
-	                                color: '#000000'
-	                            }
-	                        },
-	                        label: {
-	                            emphasis: {
-	                                show: false
-	                            }
-	                        }
-	                    }
-	                );
-	            }
-	            for (var j = 0; j < data_E[kk].length; j++) {//dessiner les arcs
-	                var lineWidth = 3;
-	                var lineValue = 1;
-	                var curvenesspre = 1000;
-	                link_c.push
-	                (
-	                    {
-	                        source: data_E[kk][j][0],
-	                        target: data_E[kk][j][1],
-	                        value: lineValue,
-	                        lineStyle: {
-	                            normal: {
-	                                color: '#000000',
-	                                width: lineWidth,
-	                                type: 'solid',
-	                                curveness: data_E[kk][j][2]/curvenesspre,
-	                                opacity: 0.75
-	                            }
-	                        },
-	                        symbol: ['arrow', 'arrow'],
-	                        symbolSize: [0, 0]
-	                    }
-	                );
-	            }
-	        }
-	        if (flag == 1) {//dessiner des lignes entre deux graphes
-	            for (c = 0; c < data_VC.length; c++) {
-	                link_c.push
-	                (
-	                    {
-	                        source: data_VC[c][0],
-	                        target: data_VC[c][1],
-	                        value: 1,
-	                        lineStyle: {
-	                            normal: {
-	                                color: '#FF0000',
-	                                width: 2,
-	                                type: 'dashed',
-	                                curveness: 0,
-	                                opacity: 0.7
-	                            }
-	                        },
-	                        symbol: ['arrow', 'arrow'],
-	                        symbolSize: [0, 0]
-	                    }
-	                );
-	            }
-	        }
-	        var option = {
-	            title: {
-	                text: graphName
-	            },
-	            tooltip: {},
-	            backgroundColor : '#FFFFFF',
-	            toolbox: {
-	                show: true,
-	                feature: {
-	                    restore: {show: true},
-	                    saveAsImage: {show: true}
-	                }
-	            },
-	            series: [
-	                {
-	                    type: 'graph',
-	                    tooltip: {
-	                        formatter: function (node) {
-	                            if (!node.data.name) {
-	                                return null;
-	                            } else {
-	                                return node.data.name+ ':'+ node.data.showPosition;
-	                            }
-	                        }
-	                    },
-	                    layout: 'none',
-	                    coordinateSystem: null,
-	                    ribbonType: true,
-	                    roam: true,
-	                    nodeScaleRatio: 0.6,
-	                    focusNodeAdjacency: true,
-	                    cursor: 'pointer',
-	                    edgeSymbol: ['circle', 'circle'],
-	                    edgeSymbolSize: [0, 0],
-	                    data: data_c,
-	                    links: link_c
-	                }
-	            ]
-	        };
-	        if(flag == 0) {
-	            switch (k) {
-	                case 0:
-	                    graph_cplex1.setOption(option);
-	                    break;
-	                case 1:
-	                    graph_cplex2.setOption(option);
-	                    break;
-	                default:
-	                    alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
-	            }
-	        }
-	        else {
-	            graph_cplex.setOption(option);
-	        }
-	    }
+			if (flag == 0) {
+				switch (k) {
+				case 0:
+					var graph_cplex1 = echarts.init(document
+							.getElementById('graph_cplex1'));
+					var data_V_length = data_V1.length;
+					var graphName = graphNum[0];
+					break;
+				case 1:
+					var graph_cplex2 = echarts.init(document
+							.getElementById('graph_cplex2'));
+					data_V_length = data_V2.length;
+					graphName = graphNum[1];
+					break;
+				default:
+					alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
+				}
+				var symbolpre = 1.8;
+				var xNodepre = 1;
+			} else {
+				var graph_cplex = echarts.init(document
+						.getElementById('graph_cplex'));
+				var graphpre = document.getElementById('graph_cplex');
+				xNodepre = graphpre.offsetWidth / 3 * 2;
+				graphName = "La visualisation de GrapheMatching";
+				symbolpre = 1.5;
+			}
+			var data_c = [];
+			var link_c = [];
+			for (var graphNo = 0; graphNo <= flag; graphNo++) {
+				var kk = k + graphNo;
+				var xNode = kk * flag * xNodepre;
+				xNode = Number(xNode);
+				for (var i = 0; i < data_V[kk].length; i++) {// dessiner les nœuds
+					data_c.push({
+						name : data_V[kk][i][0],
+						showPosition : '(' + data_V[kk][i][1] + ','
+								+ data_V[kk][i][2] + ')',
+						value : 5 * symbolpre,
+						symbol : 'circle',
+						symbolSize : 5 * symbolpre,
+						x : data_V[kk][i][1] + xNode,
+						y : data_V[kk][i][2],
+						itemStyle : {
+							normal : {
+								color : '#000000'
+							}
+						},
+						label : {
+							emphasis : {
+								show : false
+							}
+						}
+					});
+				}
+				for (var j = 0; j < data_E[kk].length; j++) {// dessiner les arcs
+					var lineWidth = 3;
+					var lineValue = 1;
+					var curvenesspre = 1000;
+					link_c.push({
+						source : data_E[kk][j][0],
+						target : data_E[kk][j][1],
+						value : lineValue,
+						lineStyle : {
+							normal : {
+								color : '#000000',
+								width : lineWidth,
+								type : 'solid',
+								curveness : data_E[kk][j][2] / curvenesspre,
+								opacity : 0.75
+							}
+						},
+						symbol : [ 'arrow', 'arrow' ],
+						symbolSize : [ 0, 0 ]
+					});
+				}
+			}
+			if (flag == 1) {// dessiner des lignes entre deux graphes
+				for (c = 0; c < data_VC.length; c++) {
+					link_c.push({
+						source : data_VC[c][0],
+						target : data_VC[c][1],
+						value : 1,
+						lineStyle : {
+							normal : {
+								color : '#FF0000',
+								width : 2,
+								type : 'dashed',
+								curveness : 0,
+								opacity : 0.7
+							}
+						},
+						symbol : [ 'arrow', 'arrow' ],
+						symbolSize : [ 0, 0 ]
+					});
+				}
+			}
+			var option = {
+				title : {
+					text : graphName
+				},
+				tooltip : {},
+				backgroundColor : '#FFFFFF',
+				toolbox : {
+					show : true,
+					feature : {
+						restore : {
+							show : true
+						},
+						saveAsImage : {
+							show : true
+						}
+					}
+				},
+				series : [ {
+					type : 'graph',
+					tooltip : {
+						formatter : function(node) {
+							if (!node.data.name) {
+								return null;
+							} else {
+								return node.data.name + ':'
+										+ node.data.showPosition;
+							}
+						}
+					},
+					layout : 'none',
+					coordinateSystem : null,
+					ribbonType : true,
+					roam : true,
+					nodeScaleRatio : 0.6,
+					focusNodeAdjacency : true,
+					cursor : 'pointer',
+					edgeSymbol : [ 'circle', 'circle' ],
+					edgeSymbolSize : [ 0, 0 ],
+					data : data_c,
+					links : link_c
+				} ]
+			};
+			if (flag == 0) {
+				switch (k) {
+				case 0:
+					graph_cplex1.setOption(option);
+					break;
+				case 1:
+					graph_cplex2.setOption(option);
+					break;
+				default:
+					alert("Le nombre d'images par défaut est 2, veuillez ajouter un case.");
+				}
+			} else {
+				graph_cplex.setOption(option);
+			}
+		}
 	}
 }
 
@@ -972,16 +1006,16 @@ function draw(iflag) {
 		alert("Veuillez mettre à jour le formulaire en premier");
 	} else {
 		var getDat = document.getElementById('getGraphesData').value;
-		if (getDat.indexOf('molecule_') >= 0) {
-			//alert("MUTA");
+		if (getDat.indexOf('chem:') >= 0) {
+			// alert("MUTA");
 			document.getElementById("graph").style.display = "";
 			getGraphesData();
-		} else if (getDat.indexOf('sampletest') >= 0) {
-			//alert("PAH");
+		} else if (getDat.indexOf('x:') >= 0 && getDat.indexOf('y:') >= 0) {
+			// alert("SAM");
 			document.getElementById("graph").style.display = "";
 			getSimpleData();
 		} else {
-			alert("Ne supporte pas la visualisation de tels graphiques")
+			alert("Ne supporte pas la visualisation de tels types de collection")
 		}
 	}
 }
